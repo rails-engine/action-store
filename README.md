@@ -22,6 +22,16 @@ And more and more.
 
 ### Usage
 
+```
+gem 'actionstore'
+```
+
+and run `bundle install`
+
+```bash
+rails g action_store:install
+```
+
 ```rb
 class Action < ActiveRecord::Base
   include ActionStore::Model

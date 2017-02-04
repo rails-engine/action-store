@@ -1,7 +1,7 @@
-require "action-store/version"
-require "action-store/configuration"
-require "action-store/engine"
-require "action-store/model"
+require "action_store/version"
+require "action_store/configuration"
+require "action_store/engine"
+require "action_store/model"
 
 module ActionStore
   class << self

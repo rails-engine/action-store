@@ -10,7 +10,7 @@ if ENV['CI']=='true'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 SimpleCov.start 'rails' do
-  add_filter 'lib/notifications/version'
+  add_filter 'lib/action_store/version'
   add_filter 'lib/generators'
 end
 
