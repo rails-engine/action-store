@@ -14,3 +14,5 @@ gem 'mysql2'
 # gem 'byebug', group: [:development, :test]
 
 gem 'factory_girl'
+gem 'simplecov'
+gem 'codecov'
