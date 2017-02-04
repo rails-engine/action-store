@@ -41,7 +41,18 @@ module ActionStore
         defined_actions.find { |a| a[:action_type] == action_type && a[:name] == name }
       end
 
-      def create_action(opts)
+      def find_action(action_type, opts)
+        opts[:action_type] = action_type
+        opts = safe_action_opts(opts)
+
+        defined_action = find_defined_action(opts[:action_type], opts[:target_type])
+        return nil if defined_action.nil?
+
+        find_by(where_opts(opts))
+      end
+
+      def create_action(action_type, opts)
+        opts[:action_type] = action_type
         opts = safe_action_opts(opts)
 
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])
@@ -55,7 +66,8 @@ module ActionStore
         action
       end
 
-      def destroy_action(opts)
+      def destroy_action(action_type, opts)
+        opts[:action_type] = action_type
         opts = safe_action_opts(opts)
 
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])

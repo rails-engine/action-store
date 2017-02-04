@@ -57,14 +57,14 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
   end
 
   test ".create_action bas action_type" do
-    a = Monkey.create_action(action_type: 'foobar')
+    a = Monkey.create_action('foobar', {})
     assert_equal false, a
     assert_equal 0, Monkey.count
   end
 
   test ".create_action" do
     post = create(:post)
-    a = Monkey.create_action(action_type: 'like', target: post, user: post.user)
+    a = Monkey.create_action('like', target: post, user: post.user)
     assert_equal false, a.new_record?
     assert_equal 'like', a.action_type
     assert_equal post.id, a.target_id
@@ -74,23 +74,23 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     post.reload
     assert_equal 1, post.likes_count
 
-    b = Monkey.create_action(action_type: 'like', target: post, user: post.user)
+    b = Monkey.create_action('like', target: post, user: post.user)
     assert_equal false, b.new_record?
     assert_equal a.id, b.id
 
-    c = Monkey.create_action(action_type: 'like', target_type: 'Post', target_id: post.id, user: post.user)
+    c = Monkey.create_action('like', target_type: 'Post', target_id: post.id, user: post.user)
     assert_equal false, c.new_record?
     assert_equal a.id, c.id
 
     user1 = create(:user)
-    a1 = Monkey.create_action(action_type: 'like', target: post, user: user1)
+    a1 = Monkey.create_action('like', target: post, user: user1)
     assert_equal false, a1.new_record?
     assert_not_equal a.id, a1.id
     assert_equal 2, Monkey.likes.where(target: post).count
     post.reload
     assert_equal 2, post.likes_count
 
-    a2 = Monkey.create_action(action_type: 'star', target: post, user: user1)
+    a2 = Monkey.create_action('star', target: post, user: user1)
     assert_equal false, a2.new_record?
     assert_not_equal a.id, a2.id
     assert_not_equal a1.id, a2.id
@@ -98,7 +98,7 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     post.reload
     assert_equal 1, post.stars_count
 
-    a3 = Monkey.create_action(action_type: 'follow', target: post, user: user1)
+    a3 = Monkey.create_action('follow', target: post, user: user1)
     assert_equal false, a3.new_record?
     assert_not_equal a.id, a3.id
     assert_not_equal a1.id, a3.id
@@ -113,24 +113,34 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     u4 = create(:user)
 
     # all user -> follow u2
-    action = Monkey.create_action(action_type: 'follow', target: u2, user: u1)
+    action = Monkey.create_action('follow', target: u2, user: u1)
     assert_not_nil(action)
-    Monkey.create_action(action_type: 'follow', target: u2, user: u3)
-    Monkey.create_action(action_type: 'follow', target: u2, user: u4)
+    Monkey.create_action('follow', target: u2, user: u3)
+    Monkey.create_action('follow', target: u2, user: u4)
     assert_equal(3, u2.reload.followers_count)
     assert_equal(1, u1.reload.following_count)
     assert_equal(1, u3.reload.following_count)
     assert_equal(1, u4.reload.following_count)
-    Monkey.destroy_action(action_type: 'follow', target: u2, user: u3)
-    Monkey.destroy_action(action_type: 'follow', target: u2, user: u4)
+    Monkey.destroy_action('follow', target: u2, user: u3)
+    Monkey.destroy_action('follow', target: u2, user: u4)
     assert_equal(1, u2.reload.followers_count)
     assert_equal(0, u3.reload.following_count)
     assert_equal(0, u4.reload.following_count)
 
     # u2 -> follow -> u1
-    action = Monkey.create_action(action_type: 'follow', target: u1, user: u2)
+    action = Monkey.create_action('follow', target: u1, user: u2)
     assert_not_nil(action)
     assert_equal(1, u2.reload.following_count)
     assert_equal(1, u1.reload.followers_count)
+  end
+
+  test ".find_action" do
+    user = create(:user)
+    post = create(:post)
+    action = Monkey.create_action('like', target: post, user: user)
+    result = Monkey.find_action('like', target: post, user: user)
+    assert_equal action.id, result.id
+    result = Monkey.find_action('like', target_type: 'Post', target_id: post.id, user: user)
+    assert_equal action.id, result.id
   end
 end
