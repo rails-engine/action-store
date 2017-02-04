@@ -1,7 +1,7 @@
 ActionStore
 -----------
 
-[![Gem Version](https://badge.fury.io/rb/activestore.svg)](https://badge.fury.io/rb/activestore) [![Build Status](https://travis-ci.org/rails-engine/activestore.svg)](https://travis-ci.org/rails-engine/activestore) [![Code Climate](https://codeclimate.com/github/rails-engine/activestore/badges/gpa.svg)](https://codeclimate.com/github/rails-engine/activestore) [![codecov.io](https://codecov.io/github/rails-engine/activestore/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/activestore?branch=master) [![](http://inch-ci.org/github/rails-engine/activestore.svg?branch=master)](http://inch-ci.org/github/rails-engine/activestore?branch=master)
+[![Gem Version](https://badge.fury.io/rb/actionstore.svg)](https://badge.fury.io/rb/actionstore) [![Build Status](https://travis-ci.org/rails-engine/actionstore.svg)](https://travis-ci.org/rails-engine/actionstore) [![Code Climate](https://codeclimate.com/github/rails-engine/actionstore/badges/gpa.svg)](https://codeclimate.com/github/rails-engine/actionstore) [![codecov.io](https://codecov.io/github/rails-engine/actionstore/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/actionstore?branch=master) [![](http://inch-ci.org/github/rails-engine/actionstore.svg?branch=master)](http://inch-ci.org/github/rails-engine/actionstore?branch=master)
 
 Store difference kind of actions (Like, Follow, Star, Block ...) in one table via ActiveRecord Polymorphic Association.
 
