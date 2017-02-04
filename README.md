@@ -26,6 +26,51 @@ And more and more.
 class Action < ActiveRecord::Base
   include ActionStore::Model
 
-  allow_actions %w(like follow star)
+  action_for :like, :post, counter_cache: true
+  action_for :star, :post, counter_cache: true
+  action_for :follow, :post
+  action_for :like, :comment, counter_cache: true
+  action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
 end
+```
+
+#### Now you can use like this:
+
+@user -> like @post
+
+```rb
+irb> Action.create_action(:like, target: @post, user: @user)
+irb> @post.reload.likes_count
+1
+```
+
+@user1 -> unlike @user2
+
+```rb
+irb> Action.destroy_action(:follow, target: @post, user: @user)
+irb> @post.reload.likes_count
+0
+```
+
+Check @user1 is liked @post
+
+```rb
+irb> action = Action.find_action(:follow, target: @post, user: @user)
+irb> action.present?
+true
+```
+
+User follow cases:
+
+```rb
+# @user1 -> follow @user2
+Action.create_action(:follow, target: @user2, user: @user1)
+@user1.reload.following_count => 1
+@user2.reload.followers_count_ => 1
+# @user2 -> follow @user1
+Action.create_action(:follow, target: @user1, user: @user2)
+# @user1 -> follow @user3
+Action.create_action(:follow, target: @user3, user: @user1)
+# @user1 -> unfollow @user3
+Action.destroy_action(:follow, target: @user3, user: @user1)
 ```
