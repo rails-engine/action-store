@@ -22,7 +22,7 @@ And more and more.
 
 ### Usage
 
-```
+```rb
 gem 'actionstore'
 ```
 
@@ -33,6 +33,7 @@ rails g action_store:install
 ```
 
 ```rb
+# app/models/action.rb
 class Action < ActiveRecord::Base
   include ActionStore::Model
 
@@ -42,6 +43,18 @@ class Action < ActiveRecord::Base
   action_for :like, :comment, counter_cache: true
   action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
 end
+```
+
+If you can't `counter_cache` you need add counter_cache field to target, user table.
+
+```rb
+add_column :users, :followers_count, :integer, default: 0
+add_column :users, :following_count, :integer, default: 0
+
+add_column :posts, :likes_count, :integer, default: 0
+add_column :posts, :stars_count, :integer, default: 0
+
+add_column :comments, :likes_count, :integer, default: 0
 ```
 
 #### Now you can use like this:
