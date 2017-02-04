@@ -74,6 +74,10 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     post.reload
     assert_equal 1, post.likes_count
 
+    a_with_option = Monkey.create_action('like', target: post, user: post.user, action_option: 'aaa')
+    assert_equal 'aaa', a_with_option.action_option
+    assert_equal 1, Monkey.likes.count
+
     b = Monkey.create_action('like', target: post, user: post.user)
     assert_equal false, b.new_record?
     assert_equal a.id, b.id

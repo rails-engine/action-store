@@ -60,7 +60,7 @@ module ActionStore
 
         action = find_or_create_by(where_opts(opts))
         if opts[:action_option]
-          action.update_attribute(action_option: opts[:action_option])
+          action.update_attribute(:action_option, opts[:action_option])
         end
         reset_counter_cache(action, defined_action)
         action
