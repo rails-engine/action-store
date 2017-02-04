@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    actionstore (0.0.0)
+    actionstore (0.1.0)
       rails (>= 4.2.0, < 5.1)
 
 GEM

@@ -6,13 +6,11 @@ module ActionStore
       source_root File.expand_path('../../../../', __FILE__)
 
       def add_initializer
-        path = "#{Rails.root}/config/initializers/action_store.rb"
-        template 'config/initializers/action_store.rb', path
+        template 'config/initializers/action_store.rb', 'config/initializers/action_store.rb'
       end
 
       def add_models
-        path = "#{Rails.root}/app/models/action.rb"
-        template 'app/models/action.rb', path
+        template 'app/models/action.rb', 'app/models/action.rb'
       end
 
       def add_migrations
