@@ -20,4 +20,10 @@ And more and more.
 
 ### Usage
 
-TODO
+```rb
+class Action < ActiveRecord::Base
+  include ActionStore::Model
+
+  allow_actions %w(like follow star)
+end
+```

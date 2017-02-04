@@ -1,13 +1,8 @@
 require 'test_helper'
 
 class ActionTest < ActiveSupport::TestCase
-  test ".user" do
+  test "work" do
     action = Action.new
-    assert action.respond_to?(:user), true
-  end
-
-  test ".target" do
-    action = Action.new
-    assert action.respond_to?(:target), true
+    assert_kind_of Action, action
   end
 end

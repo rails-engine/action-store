@@ -4,7 +4,7 @@ class CreateActions < ActiveRecord::Migration[5.0]
       t.string :action_type, null: false
       t.string :action_option
       t.string :target_type
-      t.string :target_id
+      t.integer :target_id
       t.integer :user_id
 
       t.timestamps
