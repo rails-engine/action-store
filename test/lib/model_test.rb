@@ -5,7 +5,11 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     self.table_name = 'actions'
     include ActionStore::Model
 
-    allow_actions %i(like follow star)
+    action_for :like, :post, counter_cache: true
+    action_for :star, :post, counter_cache: true
+    action_for :follow, :post
+    action_for :like, :comment, counter_cache: true
+    action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
   end
 
   test ".user" do
@@ -25,10 +29,11 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
   end
 
   test ".allow_action?" do
-    assert_equal true, Monkey.allow?(:like)
-    assert_equal true, Monkey.allow?('like')
-    assert_equal true, Monkey.allow?(:follow)
-    assert_equal true, Monkey.allow?(:star)
+    assert_equal true, Monkey.allow?(:like, :post)
+    assert_equal true, Monkey.allow?('like', 'post')
+    assert_equal true, Monkey.allow?(:follow, 'User')
+    assert_equal true, Monkey.allow?(:star, 'post')
+    assert_equal false, Monkey.allow?(:like, :user)
   end
 
   test ".create_action bas action_type" do
