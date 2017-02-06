@@ -132,14 +132,16 @@ module ActionStore
           source: :target,
           source_type: target_klass.name
 
-        # Topic has_many :like_user_actions
-        target_klass.send :has_many, has_many_user_name, has_many_scope,
-          foreign_key: :target_id,
-          class_name: action_klass.name
-        # Topic has_many :like_users
-        target_klass.send :has_many, has_many_through_user_name,
-          through: has_many_user_name,
-          source: :user
+        if target_klass != user_klass
+          # Topic has_many :like_user_actions
+          target_klass.send :has_many, has_many_user_name, has_many_scope,
+            foreign_key: :target_id,
+            class_name: action_klass.name
+          # Topic has_many :like_users
+          target_klass.send :has_many, has_many_through_user_name,
+            through: has_many_user_name,
+            source: :user
+        end
 
         # @user.like_topic
         user_klass.send(:define_method, full_action_name) do |target_or_id|
