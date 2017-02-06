@@ -77,6 +77,7 @@ module ActionStore
         return false if defined_action.nil?
 
         action = where(where_opts(opts)).first
+        return false if !action
         action.destroy
         reset_counter_cache(action, defined_action)
       end

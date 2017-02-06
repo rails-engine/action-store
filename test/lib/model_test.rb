@@ -129,6 +129,10 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     assert_equal(1, u1.reload.followers_count)
   end
 
+  test ".destroy_action with not found work" do
+    assert_equal false, Monkey.destroy_action('follow', target_type: 'Post', post_id: -1, user: create(:user))
+  end
+
   test ".find_action" do
     user = create(:user)
     post = create(:post)
