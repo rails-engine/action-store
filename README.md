@@ -16,9 +16,9 @@ And more and more.
 
 | Field | Means |
 | ----- | ----- |
-| action_type | The type of action [like, watch, follow, star, favorite] |
-| action_option | Secondly option for store you custom status, or you can let it null if you don't needs it. |
-| target_type, target_id | Polymorphic Association for difference models [User, Post, Comment] |
+| `action_type` | The type of action [like, watch, follow, star, favorite] |
+| `action_option` | Secondly option for store you custom status, or you can let it null if you don't needs it. |
+| `target_type`, `target_id` | Polymorphic Association for difference models [User, Post, Comment] |
 
 ### Usage
 
@@ -38,16 +38,19 @@ class Action < ActiveRecord::Base
   include ActionStore::Model
 
   action_for :like, :post, counter_cache: true
-  action_for :star, :post, counter_cache: true
+  action_for :star, :post, counter_cache: true, user_counter_cache: true
   action_for :follow, :post
   action_for :like, :comment, counter_cache: true
   action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
 end
 ```
 
-If you can't `counter_cache` you need add counter_cache field to target, user table.
+### Counter Cache
+
+And you need add counter_cache field to target, user table.
 
 ```rb
+add_column :users, :star_posts_count, :integer, default: 0
 add_column :users, :followers_count, :integer, default: 0
 add_column :users, :following_count, :integer, default: 0
 

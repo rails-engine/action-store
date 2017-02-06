@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170204040500) do
+ActiveRecord::Schema.define(version: 20170206094730) do
 
   create_table "actions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "action_type",   null: false
@@ -45,8 +45,9 @@ ActiveRecord::Schema.define(version: 20170204040500) do
     t.string   "name"
     t.integer  "followers_count"
     t.integer  "following_count"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "star_posts_count"
   end
 
 end

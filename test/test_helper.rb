@@ -32,7 +32,7 @@ class Monkey < ActiveRecord::Base
   include ActionStore::Model
 
   action_for :like, :post, counter_cache: true
-  action_for :star, :post, counter_cache: true
+  action_for :star, :post, counter_cache: true, user_counter_cache: true
   action_for :follow, :post
   action_for :like, :comment, counter_cache: true
   action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'

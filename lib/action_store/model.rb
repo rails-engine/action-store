@@ -16,10 +16,12 @@ module ActionStore
         target_klass = klass_name.to_s.classify.constantize
         action_type = action_type.to_s
         if opts[:counter_cache] == true
+          # @post.stars_count
           opts[:counter_cache] = "#{action_type.pluralize}_count"
         end
         if opts[:user_counter_cache] == true
-          opts[:user_counter_cache] = "#{action_type.pluralize}_count"
+          # @user.star_posts_count
+          opts[:user_counter_cache] = "#{action_type}_#{name.to_s.pluralize}_count"
         end
 
         @defined_actions ||= []
