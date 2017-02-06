@@ -97,3 +97,42 @@ Action.create_action(:follow, target: @user3, user: @user1)
 # @user1 -> unfollow @user3
 Action.destroy_action(:follow, target: @user3, user: @user1)
 ```
+
+## Builtin relations and methods
+
+When you called `action_for`, ActionStore will define Many-to-Many relations for User and Target model.
+
+for example:
+
+```rb
+class Action < ActiveRecord::Base
+  include ActionStore::Model
+
+  action_for :like, :post
+  action_for :block, :user
+end
+```
+
+It will defines Many-to-Many relations:
+
+```rb
+# for User model
+has_many :like_post_actions
+has_many :like_posts, through: :like_post_actions
+has_many :block_user_actions
+has_many :block_users, through: :block_user_actions
+
+# for Post model
+has_many :like_user_actions
+has_many :like_users, through: :like_user_actions
+```
+
+And `User` model will have methods:
+
+- @user.like_post(@post)
+- @user.unlike_post(@post)
+- @user.block_user(@user1)
+- @user.unblock_user(@user1)
+- @user.like_post_ids
+- @user.block_user_ids
+
