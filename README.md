@@ -6,9 +6,10 @@ ActionStore
 Store difference kind of actions (Like, Follow, Star, Block ...) in one table via ActiveRecord Polymorphic Association.
 
 - Like Post/Comment/Reply ...
-- Watch Post
+- Watch/Subscribe Post
 - Follow User
 - Favorite Post
+- Read Notification/Message
 
 And more and more.
 
