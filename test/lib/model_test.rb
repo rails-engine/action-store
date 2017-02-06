@@ -1,17 +1,6 @@
 require 'test_helper'
 
 class ActionStore::ModelTest < ActiveSupport::TestCase
-  class Monkey < ActiveRecord::Base
-    self.table_name = 'actions'
-    include ActionStore::Model
-
-    action_for :like, :post, counter_cache: true
-    action_for :star, :post, counter_cache: true
-    action_for :follow, :post
-    action_for :like, :comment, counter_cache: true
-    action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
-  end
-
   test ".user" do
     monkey = Monkey.new
     assert_equal true, monkey.respond_to?(:user)
@@ -23,9 +12,11 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
   end
 
   test 'scopes' do
-    assert_kind_of ActiveRecord::Relation, Monkey.likes
-    assert_kind_of ActiveRecord::Relation, Monkey.follows
-    assert_kind_of ActiveRecord::Relation, Monkey.stars
+    assert_kind_of ActiveRecord::Relation, Monkey.like_posts
+    assert_kind_of ActiveRecord::Relation, Monkey.follow_posts
+    assert_kind_of ActiveRecord::Relation, Monkey.follow_users
+    assert_kind_of ActiveRecord::Relation, Monkey.star_posts
+    assert_kind_of ActiveRecord::Relation, Monkey.like_comments
   end
 
   test ".find_defined_action" do
@@ -37,21 +28,21 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
 
     defined_action = Monkey.find_defined_action(:like, :post)
     assert_equal('like', defined_action[:action_type])
-    assert_equal('post', defined_action[:name])
-    assert_equal(Post, defined_action[:klass])
+    assert_equal('post', defined_action[:action_name])
+    assert_equal(Post, defined_action[:target_klass])
     assert_equal('likes_count', defined_action[:counter_cache])
 
     defined_action = Monkey.find_defined_action(:follow, :user)
     assert_equal('follow', defined_action[:action_type])
-    assert_equal('user', defined_action[:name])
-    assert_equal(User, defined_action[:klass])
+    assert_equal('user', defined_action[:action_name])
+    assert_equal(User, defined_action[:target_klass])
     assert_equal('followers_count', defined_action[:counter_cache])
     assert_equal('following_count', defined_action[:user_counter_cache])
 
     defined_action = Monkey.find_defined_action(:follow, :post)
     assert_equal('follow', defined_action[:action_type])
-    assert_equal('post', defined_action[:name])
-    assert_equal(Post, defined_action[:klass])
+    assert_equal('post', defined_action[:action_name])
+    assert_equal(Post, defined_action[:target_klass])
     assert_nil(defined_action[:counter_cache])
     assert_nil(defined_action[:user_counter_cache])
   end
@@ -70,13 +61,13 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     assert_equal post.id, a.target_id
     assert_equal 'Post', a.target_type
     assert_equal  post.user_id, a.user_id
-    assert_equal 1, Monkey.likes.count
+    assert_equal 1, Monkey.like_posts.count
     post.reload
     assert_equal 1, post.likes_count
 
     a_with_option = Monkey.create_action('like', target: post, user: post.user, action_option: 'aaa')
     assert_equal 'aaa', a_with_option.action_option
-    assert_equal 1, Monkey.likes.count
+    assert_equal 1, Monkey.like_posts.count
 
     b = Monkey.create_action('like', target: post, user: post.user)
     assert_equal false, b.new_record?
@@ -90,7 +81,7 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     a1 = Monkey.create_action('like', target: post, user: user1)
     assert_equal false, a1.new_record?
     assert_not_equal a.id, a1.id
-    assert_equal 2, Monkey.likes.where(target: post).count
+    assert_equal 2, Monkey.like_posts.where(target: post).count
     post.reload
     assert_equal 2, post.likes_count
 
@@ -98,7 +89,7 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     assert_equal false, a2.new_record?
     assert_not_equal a.id, a2.id
     assert_not_equal a1.id, a2.id
-    assert_equal 1, Monkey.stars.where(target: post).count
+    assert_equal 1, Monkey.star_posts.where(target: post).count
     post.reload
     assert_equal 1, post.stars_count
 
@@ -107,7 +98,7 @@ class ActionStore::ModelTest < ActiveSupport::TestCase
     assert_not_equal a.id, a3.id
     assert_not_equal a1.id, a3.id
     assert_not_equal a2.id, a3.id
-    assert_equal 1, Monkey.follows.where(target: post).count
+    assert_equal 1, Monkey.follow_posts.where(target: post).count
   end
 
   test ".destroy_action" do
