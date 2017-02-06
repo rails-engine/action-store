@@ -41,6 +41,16 @@ You can use `action_for` to define actions:
 action_for <action_type>, <target>, opts
 ```
 
+#### Convention Over Configuration:
+
+| action, target | Target Model | Target `counter_cache_field` | User `counter_cache_field` | Target has_many | User has_many |
+| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| `action_for :like, :post` | `Post` | | | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
+| `action_for :like, :post, counter_cache: true` | `Post` | `likes_count` |  | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
+| `action_for :star, :project, class_name: 'Repository'` | `Repository ` | `stars_count` | `star_projects_count` | `has_many :star_by_user_actions`, `has_many :star_by_users` |
+| `action_for :follow, :user` | `User` | `follows_count` | `follow_users_count` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
+| `action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'` | `User` | `followers_count ` | `following_count ` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
+
 for example:
 
 ```rb
