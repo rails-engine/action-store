@@ -4,7 +4,7 @@ module ActionStore
 
     initializer "action_store.init_action", after: :load_config_initializers do
       # Ensure eager_load Action model to init methods
-      Action.new
+      require 'action'
     end
   end
 end
