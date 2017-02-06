@@ -12,15 +12,15 @@ Store difference kind of actions (Like, Follow, Star, Block ...) in one table vi
 
 And more and more.
 
-### Basic table struct
+## Basic table struct
 
 | Field | Means |
 | ----- | ----- |
 | `action_type` | The type of action [like, watch, follow, star, favorite] |
 | `action_option` | Secondly option for store you custom status, or you can let it null if you don't needs it. |
-| `target_type`, `target_id` | Polymorphic Association for difference models [User, Post, Comment] |
+| `target_type`, `target_id` | Polymorphic Association for difference `Target` models [User, Post, Comment] |
 
-### Usage
+## Usage
 
 ```rb
 gem 'actionstore'
@@ -31,6 +31,16 @@ and run `bundle install`
 ```bash
 rails g action_store:install
 ```
+
+### Define Actions
+
+You can use `action_for` to define actions:
+
+```
+action_for <action_type>, <target>, opts
+```
+
+for example:
 
 ```rb
 # app/models/action.rb
@@ -118,16 +128,23 @@ end
 
 It will defines Many-to-Many relations:
 
+- For User model will defined: `<action>_<target>s` (like_posts)
+- For Target model will defined: `<action>_by_users` (like_by_users)
+
 ```rb
 # for User model
 has_many :like_post_actions
 has_many :like_posts, through: :like_post_actions
+## as user
 has_many :block_user_actions
 has_many :block_users, through: :block_user_actions
+## as target
+has_many :block_by_user_actions
+has_many :block_by_users, through: :block_by_user_actions
 
-# for Post model
-has_many :like_user_actions
-has_many :like_users, through: :like_user_actions
+# for Target model
+has_many :like_by_user_actions
+has_many :like_by_users, through: :like_user_actions
 ```
 
 And `User` model will have methods:
@@ -138,4 +155,4 @@ And `User` model will have methods:
 - @user.unblock_user(@user1)
 - @user.like_post_ids
 - @user.block_user_ids
-
+- @user.block_by_user_ids
