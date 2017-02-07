@@ -63,7 +63,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal true, User.create_action('like', target: post, user: post.user)
     assert_equal a.id, Action.last.id
 
-    c = User.create_action('like', target_type: 'Post', target_id: post.id, user: post.user)
+    User.create_action('like', target_type: 'Post', target_id: post.id, user: post.user)
     assert_equal a.id, Action.last.id
 
     user1 = create(:user)
@@ -168,6 +168,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal true, @user.like_post_ids.include?(@post.id)
     assert_equal true, @user.like_posts.exists?(@post.id)
     assert_equal true, @user.like_posts.exists?(@post1.id)
+    assert_equal true, @user.like_post?(@post1)
 
     # unlike
     action1 = @user.unlike_post(@post1)
@@ -176,6 +177,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal 1, @user.like_post_ids.length
     assert_equal false, @user.like_post_ids.include?(@post1.id)
     assert_equal false, @user.like_posts.exists?(@post1.id)
+    assert_equal false, @user.like_post?(@post1)
   end
 
   test "follow_user" do
@@ -187,6 +189,8 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal 1, @user1.follow_by_users.length
     assert_equal true, @user.follow_users.exists?(@user1.id)
     assert_equal true, @user1.follow_by_users.exists?(@user.id)
+    assert_equal true, @user.follow_user?(@user1)
+    assert_equal true, @user.follow_user?(@user1.id)
   end
 
   test "@user.has_many :like_post_actions / @post.has_many :like_user_actions" do

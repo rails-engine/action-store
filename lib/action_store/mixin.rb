@@ -174,6 +174,15 @@ module ActionStore
           result
         end
 
+        # @user.like_topic?
+        user_klass.send(:define_method, "#{full_action_name}?") do |target_or_id|
+          target_id = target_or_id.is_a?(target_klass) ? target_or_id.id : target_or_id
+          result = user_klass.find_action(action_type, target_type: target_klass.name,
+                                                       target_id: target_id,
+                                                       user: self)
+          result.present?
+        end
+
         # @user.unlike_topic
         user_klass.send(:define_method, unaction_name) do |target_or_id|
           target_id = target_or_id.is_a?(target_klass) ? target_or_id.id : target_or_id

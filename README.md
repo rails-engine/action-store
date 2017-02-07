@@ -116,11 +116,13 @@ User follow cases:
 
 ```rb
 # @user1 -> follow @user2
-user1.create_action(:follow, target: @user2)
+@user1.create_action(:follow, target: @user2)
 @user1.reload.following_count => 1
 @user2.reload.followers_count_ => 1
+@user1.follow_user?(@user2) => true
 # @user2 -> follow @user1
 @user2.create_action(:follow, target: @user1)
+@user2.follow_user?(@user1) => true
 # @user1 -> follow @user3
 @user1.create_action(:follow, target: @user3)
 # @user1 -> unfollow @user3
@@ -167,6 +169,7 @@ And `User` model will have methods:
 - @user.destroy_action(:like, target: @post)
 - @user.find_action(:like, target: @post)
 - @user.like_post(@post)
+- @user.like_post?(@post)
 - @user.unlike_post(@post)
 - @user.block_user(@user1)
 - @user.unblock_user(@user1)
