@@ -47,6 +47,7 @@ module ActionStore
       def find_action(action_type, opts)
         opts[:action_type] = action_type
         opts = safe_action_opts(opts)
+        return nil if opts[:target_id].blank? || opts[:target_type].blank?
 
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])
         return nil if defined_action.nil?
@@ -57,6 +58,7 @@ module ActionStore
       def create_action(action_type, opts)
         opts[:action_type] = action_type
         opts = safe_action_opts(opts)
+        return false if opts[:target_id].blank? || opts[:target_type].blank?
 
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])
         return false if defined_action.nil?
@@ -66,20 +68,22 @@ module ActionStore
           action.update_attribute(:action_option, opts[:action_option])
         end
         reset_counter_cache(action, defined_action)
-        action
+        true
       end
 
       def destroy_action(action_type, opts)
         opts[:action_type] = action_type
         opts = safe_action_opts(opts)
+        return false if opts[:target_id].blank? || opts[:target_type].blank?
 
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])
         return false if defined_action.nil?
 
         action = where(where_opts(opts)).first
-        return false if !action
+        return true if !action
         action.destroy
         reset_counter_cache(action, defined_action)
+        true
       end
 
       def reset_counter_cache(action, defined_action)
@@ -148,21 +152,21 @@ module ActionStore
         # @user.like_topic
         user_klass.send(:define_method, full_action_name) do |target_or_id|
           target_id = target_or_id.is_a?(target_klass) ? target_or_id.id : target_or_id
-          action = action_klass.create_action(action_type, target_type: target_klass.name,
+          result = action_klass.create_action(action_type, target_type: target_klass.name,
                                                            target_id: target_id,
                                                            user: self)
           self.reload
-          action
+          result
         end
 
         # @user.unlike_topic
         user_klass.send(:define_method, unaction_name) do |target_or_id|
           target_id = target_or_id.is_a?(target_klass) ? target_or_id.id : target_or_id
-          action = action_klass.destroy_action(action_type, target_type: target_klass.name,
+          result = action_klass.destroy_action(action_type, target_type: target_klass.name,
                                                             target_id: target_id,
                                                             user: self)
           self.reload
-          action
+          result
         end
       end
 
