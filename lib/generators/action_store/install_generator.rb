@@ -9,10 +9,6 @@ module ActionStore
         template 'config/initializers/action_store.rb', 'config/initializers/action_store.rb'
       end
 
-      def add_models
-        template 'app/models/action.rb', 'app/models/action.rb'
-      end
-
       def add_migrations
         exec('rake action_store:install:migrations')
       end

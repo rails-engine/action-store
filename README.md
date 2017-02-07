@@ -29,40 +29,38 @@ gem 'actionstore'
 
 and run `bundle install`
 
-```bash
-rails g action_store:install
-```
-
 ### Define Actions
 
-You can use `action_for` to define actions:
+You can use `action_store` to define actions:
+
+app/models/user.rb
 
 ```
-action_for <action_type>, <target>, opts
+class User < ActiveRecord::Base
+  action_store <action_type>, <target>, opts
+end
 ```
 
 #### Convention Over Configuration:
 
 | action, target | Target Model | Target `counter_cache_field` | User `counter_cache_field` | Target has_many | User has_many |
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
-| `action_for :like, :post` | `Post` | | | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
-| `action_for :like, :post, counter_cache: true` | `Post` | `likes_count` |  | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
-| `action_for :star, :project, class_name: 'Repository'` | `Repository ` | `stars_count` | `star_projects_count` | `has_many :star_by_user_actions`, `has_many :star_by_users` |
-| `action_for :follow, :user` | `User` | `follows_count` | `follow_users_count` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
-| `action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'` | `User` | `followers_count ` | `following_count ` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
+| `action_store :like, :post` | `Post` | | | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
+| `action_store :like, :post, counter_cache: true` | `Post` | `likes_count` |  | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
+| `action_store :star, :project, class_name: 'Repository'` | `Repository ` | `stars_count` | `star_projects_count` | `has_many :star_by_user_actions`, `has_many :star_by_users` |
+| `action_store :follow, :user` | `User` | `follows_count` | `follow_users_count` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
+| `action_store :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'` | `User` | `followers_count ` | `following_count ` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
 
 for example:
 
 ```rb
 # app/models/action.rb
-class Action < ActiveRecord::Base
-  include ActionStore::Model
-
-  action_for :like, :post, counter_cache: true
-  action_for :star, :post, counter_cache: true, user_counter_cache: true
-  action_for :follow, :post
-  action_for :like, :comment, counter_cache: true
-  action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
+class User < ActiveRecord::Base
+  action_store :like, :post, counter_cache: true
+  action_store :star, :post, counter_cache: true, user_counter_cache: true
+  action_store :follow, :post
+  action_store :like, :comment, counter_cache: true
+  action_store :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
 end
 ```
 
@@ -86,7 +84,10 @@ add_column :comments, :likes_count, :integer, default: 0
 @user -> like @post
 
 ```rb
-irb> Action.create_action(:like, target: @post, user: @user)
+irb> User.create_action(:like, target: @post, user: @user)
+true
+irb> @user.create_action(:like, target: @post)
+true
 irb> @post.reload.likes_count
 1
 ```
@@ -94,7 +95,10 @@ irb> @post.reload.likes_count
 @user1 -> unlike @user2
 
 ```rb
-irb> Action.destroy_action(:follow, target: @post, user: @user)
+irb> User.destroy_action(:follow, target: @post, user: @user)
+true
+irb> @user.destroy_action(:like, target: @post)
+true
 irb> @post.reload.likes_count
 0
 ```
@@ -102,7 +106,8 @@ irb> @post.reload.likes_count
 Check @user1 is liked @post
 
 ```rb
-irb> action = Action.find_action(:follow, target: @post, user: @user)
+irb> action = User.find_action(:follow, target: @post, user: @user)
+irb> action = @user.find_action(:like, target: @post)
 irb> action.present?
 true
 ```
@@ -111,29 +116,27 @@ User follow cases:
 
 ```rb
 # @user1 -> follow @user2
-Action.create_action(:follow, target: @user2, user: @user1)
+user1.create_action(:follow, target: @user2)
 @user1.reload.following_count => 1
 @user2.reload.followers_count_ => 1
 # @user2 -> follow @user1
-Action.create_action(:follow, target: @user1, user: @user2)
+@user2.create_action(:follow, target: @user1)
 # @user1 -> follow @user3
-Action.create_action(:follow, target: @user3, user: @user1)
+@user1.create_action(:follow, target: @user3)
 # @user1 -> unfollow @user3
-Action.destroy_action(:follow, target: @user3, user: @user1)
+ @user1.destroy_action(:follow, target: @user3)
 ```
 
 ## Builtin relations and methods
 
-When you called `action_for`, ActionStore will define Many-to-Many relations for User and Target model.
+When you called `action_store`, ActionStore will define Many-to-Many relations for User and Target model.
 
 for example:
 
 ```rb
-class Action < ActiveRecord::Base
-  include ActionStore::Model
-
-  action_for :like, :post
-  action_for :block, :user
+class User < ActiveRecord::Base
+  action_store :like, :post
+  action_store :block, :user
 end
 ```
 
@@ -160,6 +163,9 @@ has_many :like_by_users, through: :like_user_actions
 
 And `User` model will have methods:
 
+- @user.create_action(:like, target: @post)
+- @user.destroy_action(:like, target: @post)
+- @user.find_action(:like, target: @post)
 - @user.like_post(@post)
 - @user.unlike_post(@post)
 - @user.block_user(@user1)

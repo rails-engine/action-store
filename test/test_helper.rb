@@ -27,17 +27,6 @@ Minitest.backtrace_filter = Minitest::BacktraceFilter.new
 
 FactoryGirl.find_definitions
 
-class Monkey < ActiveRecord::Base
-  self.table_name = 'actions'
-  include ActionStore::Model
-
-  action_for :like, :post, counter_cache: true
-  action_for :star, :post, counter_cache: true, user_counter_cache: true
-  action_for :follow, :post
-  action_for :like, :comment, counter_cache: true
-  action_for :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'
-end
-
 # Load fixtures from the engine
 class ActiveSupport::TestCase
   include FactoryGirl::Syntax::Methods

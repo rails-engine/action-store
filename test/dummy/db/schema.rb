@@ -17,10 +17,12 @@ ActiveRecord::Schema.define(version: 20170206094730) do
     t.string   "action_option"
     t.string   "target_type"
     t.integer  "target_id"
+    t.string   "user_type"
     t.integer  "user_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.index ["user_id", "action_type"], name: "index_actions_on_user_id_and_action_type", using: :btree
+    t.index ["target_type", "target_id", "action_type"], name: "index_actions_on_target_type_and_target_id_and_action_type", using: :btree
+    t.index ["user_type", "user_id", "action_type"], name: "index_actions_on_user_type_and_user_id_and_action_type", using: :btree
   end
 
   create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
