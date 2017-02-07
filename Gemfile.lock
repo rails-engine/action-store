@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    actionstore (0.1.0)
+    action-store (0.2.0.beta)
       rails (>= 4.2.0, < 5.1)
 
 GEM
@@ -125,7 +125,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  actionstore!
+  action-store!
   codecov
   factory_girl
   mysql2

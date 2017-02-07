@@ -1,3 +1,3 @@
-# actionstore Config
+# ActionStore Config
 ActionStore.configure do
 end

@@ -1,7 +1,7 @@
 ActionStore
 -----------
 
-[![Gem Version](https://badge.fury.io/rb/actionstore.svg)](https://badge.fury.io/rb/actionstore) [![Build Status](https://travis-ci.org/rails-engine/actionstore.svg)](https://travis-ci.org/rails-engine/actionstore) [![Code Climate](https://codeclimate.com/github/rails-engine/actionstore/badges/gpa.svg)](https://codeclimate.com/github/rails-engine/actionstore) [![codecov.io](https://codecov.io/github/rails-engine/actionstore/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/actionstore?branch=master) [![](http://inch-ci.org/github/rails-engine/actionstore.svg?branch=master)](http://inch-ci.org/github/rails-engine/actionstore?branch=master)
+[![Gem Version](https://badge.fury.io/rb/action-store.svg)](https://badge.fury.io/rb/action-store) [![Build Status](https://travis-ci.org/rails-engine/action-store.svg)](https://travis-ci.org/rails-engine/action-store) [![Code Climate](https://codeclimate.com/github/rails-engine/action-store/badges/gpa.svg)](https://codeclimate.com/github/rails-engine/action-store) [![codecov.io](https://codecov.io/github/rails-engine/action-store/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/action-store?branch=master) [![](http://inch-ci.org/github/rails-engine/action-store.svg?branch=master)](http://inch-ci.org/github/rails-engine/action-store?branch=master)
 
 Store difference kind of actions (Like, Follow, Star, Block ...) in one table via ActiveRecord Polymorphic Association.
 
@@ -24,7 +24,7 @@ And more and more.
 ## Usage
 
 ```rb
-gem 'actionstore'
+gem 'action-store'
 ```
 
 and run `bundle install`
