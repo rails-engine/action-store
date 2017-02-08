@@ -3,7 +3,7 @@ module ActionStore
     extend ActiveSupport::Concern
 
     included do
-      # puts "Initalize ActionStore::Model"
+      # puts "Initialize ActionStore::Model"
       belongs_to :target, polymorphic: true
       belongs_to :user, polymorphic: true
     end
