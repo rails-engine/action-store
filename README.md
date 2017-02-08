@@ -31,6 +31,16 @@ gem 'action-store'
 
 and run `bundle install`
 
+Generate Migrations:
+
+```
+$ rails g action_store:install
+create  config/initializers/action_store.rb
+migration 20170208024704_create_actions.rb from action_store
+```
+
+and run `rails db:migrate`.
+
 ### Define Actions
 
 You can use `action_store` to define actions:
