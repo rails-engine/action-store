@@ -13,6 +13,8 @@ Store difference kind of actions (Like, Follow, Star, Block ...) in one table vi
 
 And more and more.
 
+[中文介绍和使用说明](https://ruby-china.org/topics/32262)
+
 ## Basic table struct
 
 | Field | Means |
