@@ -1,3 +1,8 @@
+0.2.1
+-----
+
+- Use `ActiveSupport.on_load` to hook into Active Record.
+
 0.2.0
 -----
 
