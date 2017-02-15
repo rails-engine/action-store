@@ -18,4 +18,6 @@ module ActionStore
   end
 end
 
-ActiveRecord::Base.send(:include, ActionStore::Mixin)
+ActiveSupport.on_load(:active_record) do
+  include ActionStore::Mixin
+end
