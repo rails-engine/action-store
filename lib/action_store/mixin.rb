@@ -34,7 +34,7 @@ module ActionStore
       def action_store(action_type, name, opts = {})
         opts ||= {}
         klass_name = opts[:class_name] || name
-        target_klass = klass_name.to_s.classify.constantize
+        target_klass = klass_name.to_s.split('__'.freeze).map { |s| s.classify }.join('::').constantize
         action_type = action_type.to_s
         if opts[:counter_cache] == true
           # @post.stars_count
@@ -126,7 +126,7 @@ module ActionStore
         user_klass = self
 
         # user, person
-        user_name = user_klass.name.underscore.singularize
+        user_name = user_klass.name.split('::'.freeze).join('__'.freeze).underscore.singularize
 
         # like_topic, follow_user
         full_action_name = [action_type, action_name].join('_')
