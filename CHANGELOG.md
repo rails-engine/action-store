@@ -1,3 +1,12 @@
+0.2.2
+-----
+
+- Fix #2 support Target that under a namespace.
+
+```rb
+action_store :like, :blog_post, class_name: 'Blog::Post'
+```
+
 0.2.1
 -----
 
