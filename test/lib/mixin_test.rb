@@ -6,6 +6,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     @user1 = create(:user)
     @post = create(:post)
     @post1 = create(:post)
+    @blog_post = create(:blog_post)
   end
 
   test ".find_defined_action" do
@@ -93,6 +94,17 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal 1, Action.where(action_type: 'follow', target: post).count
   end
 
+  test ".create_action with target_type under namespace" do
+    user = create(:user)
+    blog_post = create(:blog_post)
+    assert_equal true, User.create_action('like', target: blog_post, user: user)
+    assert_equal 1, Action.where(action_type: 'like', target: blog_post).count
+    a = Action.last
+    assert_equal 'like', a.action_type
+    assert_equal 'Blog::Post', a.target_type
+    assert_equal blog_post.id, a.target_id
+  end
+
   test ".destroy_action" do
     u1 = create(:user)
     u2 = create(:user)
@@ -178,6 +190,22 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal false, @user.like_post_ids.include?(@post1.id)
     assert_equal false, @user.like_posts.exists?(@post1.id)
     assert_equal false, @user.like_post?(@post1)
+  end
+
+  test "like_blog_post" do
+    action = @user.like_blog_post(@blog_post)
+    assert_not_equal false, action
+    assert_equal 1, @user.like_blog_posts.length
+    assert_equal 1, @user.like_blog_post_ids.length
+    assert_equal true, @user.like_blog_post_ids.include?(@blog_post.id)
+    assert_equal true, @user.like_blog_post?(@blog_post)
+
+    # unlike
+    action = @user.unlike_blog_post(@blog_post)
+    assert_equal 0, @user.like_blog_posts.length
+    assert_equal 0, @user.like_blog_post_ids.length
+    assert_equal false, @user.like_blog_post_ids.include?(@blog_post.id)
+    assert_equal false, @user.like_blog_post?(@blog_post)
   end
 
   test "follow_user" do

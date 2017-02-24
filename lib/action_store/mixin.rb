@@ -23,10 +23,12 @@ module ActionStore
     module ClassMethods
       attr_reader :defined_actions
 
-      def find_defined_action(action_type, name)
+      def find_defined_action(action_type, target_type)
         action_type = action_type.to_s
-        name = name.to_s.singularize.underscore
-        defined_actions.find { |a| a[:action_type] == action_type && a[:action_name] == name }
+        name = target_type.to_s.singularize.underscore
+        defined_actions.find do |a|
+          a[:action_type] == action_type && (a[:action_name] == name || a[:target_type] == target_type)
+        end
       end
 
       def action_store(action_type, name, opts = {})
@@ -48,6 +50,7 @@ module ActionStore
           action_name: name.to_s,
           action_type: action_type,
           target_klass: target_klass,
+          target_type: klass_name,
           counter_cache: opts[:counter_cache],
           user_counter_cache: opts[:user_counter_cache]
         }
