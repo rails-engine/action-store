@@ -1,3 +1,26 @@
+0.3.0
+-----
+
+- Fix for action_store in Model that not named `User`.
+- Fix has_many name when `User` model in a namespace.
+
+For example:
+
+```rb
+class Person
+  action_store :like, :post
+end
+
+module Blog
+  class User
+    action_store :like, :post
+  end
+end
+
+@post.like_by_people, @post.like_by_person_actions
+@blog_user.like_post(@post), @post.like_by_blog_users, @post.like_by_blog_user_actions
+```
+
 0.2.2
 -----
 
