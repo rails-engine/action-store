@@ -33,8 +33,9 @@ module ActionStore
 
       def action_store(action_type, name, opts = {})
         opts ||= {}
-        klass_name = opts[:class_name] || name
-        target_klass = klass_name.to_s.classify.constantize
+        target_type = name
+        klass_name = opts[:class_name] || name.to_s.classify
+        target_klass = klass_name.constantize
         action_type = action_type.to_s
         if opts[:counter_cache] == true
           # @post.stars_count
@@ -50,7 +51,7 @@ module ActionStore
           action_name: name.to_s,
           action_type: action_type,
           target_klass: target_klass,
-          target_type: klass_name,
+          target_type: target_klass.name,
           counter_cache: opts[:counter_cache],
           user_counter_cache: opts[:user_counter_cache]
         }
@@ -126,7 +127,7 @@ module ActionStore
         user_klass = self
 
         # user, person
-        user_name = user_klass.name.underscore.singularize
+        user_name = user_klass.table_name.underscore.singularize
 
         # like_topic, follow_user
         full_action_name = [action_type, action_name].join('_')
@@ -150,7 +151,9 @@ module ActionStore
         }
 
         # User has_many :like_topic_actions
-        user_klass.send :has_many, has_many_name, has_many_scope, class_name: 'Action'
+        user_klass.send :has_many, has_many_name, has_many_scope,
+          class_name: 'Action',
+          foreign_key: 'user_id'
         # User has_many :like_topics
         user_klass.send :has_many, has_many_through_name,
           through: has_many_name,

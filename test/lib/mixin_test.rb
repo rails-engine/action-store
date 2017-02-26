@@ -7,6 +7,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     @post = create(:post)
     @post1 = create(:post)
     @blog_post = create(:blog_post)
+    @person = create(:blog_person)
   end
 
   test ".find_defined_action" do
@@ -241,5 +242,16 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
 
     assert_equal 1, @post.like_by_users.length
     assert_kind_of User, @post.like_by_users.first
+  end
+
+  test "@person like post" do
+    action = @person.like_post(@post)
+    assert_not_equal false, action
+
+    assert_equal 1, @person.like_posts.length
+    assert_kind_of Blog::Post, @person.like_posts.first
+
+    assert_equal 1, @post.like_by_blog_person_actions.length
+    assert_equal 1, @post.like_by_blog_people.length
   end
 end
