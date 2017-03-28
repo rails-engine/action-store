@@ -56,7 +56,7 @@ end
 #### Convention Over Configuration:
 
 | action, target | Target Model | Target `counter_cache_field` | User `counter_cache_field` | Target has_many | User has_many |
-| ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+|----------------|--------------|------------------------------|----------------------------|-----------------|---------------|
 | `action_store :like, :post` | `Post` | | | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
 | `action_store :like, :post, counter_cache: true` | `Post` | `likes_count` |  | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
 | `action_store :star, :project, class_name: 'Repository'` | `Repository ` | `stars_count` | `star_projects_count` | `has_many :star_by_user_actions`, `has_many :star_by_users` |
