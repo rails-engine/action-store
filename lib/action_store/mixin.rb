@@ -108,11 +108,18 @@ module ActionStore
       def reset_counter_cache(action, defined_action)
         return false if action.blank?
         if defined_action[:counter_cache] && action.target.present?
-          target_count = Action.where({ action_type: defined_action[:action_type], target: action.target }).count
+          target_count = Action.where(
+            action_type: defined_action[:action_type],
+            target: action.target
+          ).count
           action.target.update_attribute(defined_action[:counter_cache], target_count)
         end
         if defined_action[:user_counter_cache] && action.user.present?
-          user_count = Action.where({ action_type: defined_action[:action_type], user: action.user }).count
+          user_count = Action.where(
+            action_type: defined_action[:action_type],
+            target_type: action.target_type,
+            user: action.user
+          ).count
           action.user.update_attribute(defined_action[:user_counter_cache], user_count)
         end
       end

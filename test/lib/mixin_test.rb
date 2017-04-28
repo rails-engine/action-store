@@ -111,6 +111,9 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     u2 = create(:user)
     u3 = create(:user)
     u4 = create(:user)
+    post = create(:post)
+
+    User.create_action('follow', target: post, user: u1)
 
     # all user -> follow u2
     action = User.create_action('follow', target: u2, user: u1)
@@ -132,6 +135,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_not_nil(action)
     assert_equal(1, u2.reload.following_count)
     assert_equal(1, u1.reload.followers_count)
+
   end
 
   test ".destroy_action with not found work" do
