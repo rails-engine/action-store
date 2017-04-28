@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    action-store (0.3.0)
+    action-store (0.3.1)
       rails (>= 4.2.0, < 5.1)
 
 GEM
@@ -55,13 +55,13 @@ GEM
     erubis (2.7.0)
     factory_girl (4.8.0)
       activesupport (>= 3.0.0)
-    globalid (0.3.7)
-      activesupport (>= 4.1.0)
+    globalid (0.4.0)
+      activesupport (>= 4.2.0)
     i18n (0.8.0)
     json (2.0.3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    mail (2.6.4)
+    mail (2.6.5)
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (3.1)
@@ -71,7 +71,7 @@ GEM
     minitest (5.10.1)
     mysql2 (0.4.5)
     nio4r (1.2.1)
-    nokogiri (1.7.0.1)
+    nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
     rack (2.0.1)
     rack-test (0.6.3)
@@ -132,4 +132,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   1.13.7
+   1.14.5

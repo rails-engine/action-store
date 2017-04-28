@@ -1,3 +1,8 @@
+0.3.1
+-----
+
+- Fix that `:user_counter_cache` was incorrect, it not count with target_type.
+
 0.3.0
 -----
 
