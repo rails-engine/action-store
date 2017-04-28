@@ -1,3 +1,8 @@
+0.3.2
+-----
+
+- Gem dependency for Rails 5.x.
+
 0.3.1
 -----
 
