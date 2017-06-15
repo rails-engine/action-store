@@ -119,7 +119,6 @@ module ActionStore
           user_count = Action.where(
             action_type: defined_action[:action_type],
             target_type: action.target_type,
-            target_id: action.target_id,
             user_type: action.user_type,
             user_id: action.user_id
           ).count
