@@ -3,13 +3,13 @@ ActionStore
 
 [![Gem Version](https://badge.fury.io/rb/action-store.svg)](https://badge.fury.io/rb/action-store) [![Build Status](https://travis-ci.org/rails-engine/action-store.svg)](https://travis-ci.org/rails-engine/action-store) [![Code Climate](https://codeclimate.com/github/rails-engine/action-store/badges/gpa.svg)](https://codeclimate.com/github/rails-engine/action-store) [![codecov.io](https://codecov.io/github/rails-engine/action-store/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/action-store?branch=master)
 
-Store different kind of actions (Like, Follow, Star, Block ...) in one table via ActiveRecord Polymorphic Association.
+Store different kinds of actions (Like, Follow, Star, Block, etc.) in a single table via ActiveRecord Polymorphic Associations.
 
-- Like Post/Comment/Reply ...
-- Watch/Subscribe Post
-- Follow User
-- Favorite Post
-- Read Notification/Message
+- Like Posts/Comment/Reply ...
+- Watch/Subscribe to Posts
+- Follow Users
+- Favorite Posts
+- Read Notifications/Messages
 
 And more and more.
 
@@ -17,11 +17,11 @@ And more and more.
 
 ## Basic table struct
 
-| Field | Means |
+| Column | Description |
 | ----- | ----- |
 | `action_type` | The type of action [like, watch, follow, star, favorite] |
-| `action_option` | Secondly option for store you custom status, or you can let it null if you don't needs it. |
-| `target_type`, `target_id` | Polymorphic Association for difference `Target` models [User, Post, Comment] |
+| `action_option` | Secondary option for storing your custom status, or null if unneeded. |
+| `target_type`, `target_id` | Polymorphic Association for different `Target` models [User, Post, Comment] |
 
 ## Usage
 
@@ -43,7 +43,7 @@ and run `rails db:migrate`.
 
 ### Define Actions
 
-You can use `action_store` to define actions:
+Use `action_store` to define actions:
 
 app/models/user.rb
 
@@ -78,7 +78,7 @@ end
 
 ### Counter Cache
 
-And you need add counter_cache field to target, user table.
+Add counter_cache field to target and user tables.
 
 ```rb
 add_column :users, :star_posts_count, :integer, default: 0
@@ -91,9 +91,9 @@ add_column :posts, :stars_count, :integer, default: 0
 add_column :comments, :likes_count, :integer, default: 0
 ```
 
-#### Now you can use like this:
+#### Example usage:
 
-@user -> like @post
+@user likes @post
 
 ```rb
 irb> User.create_action(:like, target: @post, user: @user)
@@ -104,7 +104,7 @@ irb> @post.reload.likes_count
 1
 ```
 
-@user1 -> unlike @user2
+@user1 unlikes @user2
 
 ```rb
 irb> User.destroy_action(:follow, target: @post, user: @user)
@@ -115,7 +115,7 @@ irb> @post.reload.likes_count
 0
 ```
 
-Check @user1 is liked @post
+Check if @user1 likes @post
 
 ```rb
 irb> action = User.find_action(:follow, target: @post, user: @user)
@@ -124,7 +124,7 @@ irb> action.present?
 true
 ```
 
-User follow cases:
+Other following use cases:
 
 ```rb
 # @user1 -> follow @user2
@@ -141,11 +141,11 @@ User follow cases:
  @user1.destroy_action(:follow, target: @user3)
 ```
 
-## Builtin relations and methods
+## Built-in relations and methods
 
-When you called `action_store`, ActionStore will define Many-to-Many relations for User and Target model.
+When you call `action_store`, ActionStore will define many-to-many relations for User and Target models.
 
-for example:
+For example:
 
 ```rb
 class User < ActiveRecord::Base
@@ -154,10 +154,10 @@ class User < ActiveRecord::Base
 end
 ```
 
-It will defines Many-to-Many relations:
+Defines many-to-many relations:
 
-- For User model will defined: `<action>_<target>s` (like_posts)
-- For Target model will defined: `<action>_by_users` (like_by_users)
+- For User model: `<action>_<target>s` (like_posts)
+- For Target model: `<action>_by_users` (like_by_users)
 
 ```rb
 # for User model
@@ -175,7 +175,7 @@ has_many :like_by_user_actions
 has_many :like_by_users, through: :like_user_actions
 ```
 
-And `User` model will have methods:
+And `User` model will now have methods:
 
 - @user.create_action(:like, target: @post)
 - @user.destroy_action(:like, target: @post)
