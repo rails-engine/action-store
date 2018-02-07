@@ -12,17 +12,17 @@
 
 ActiveRecord::Schema.define(version: 20170226113631) do
 
-  create_table "actions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "action_type",   null: false
-    t.string   "action_option"
-    t.string   "target_type"
-    t.integer  "target_id"
-    t.string   "user_type"
-    t.integer  "user_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["target_type", "target_id", "action_type"], name: "index_actions_on_target_type_and_target_id_and_action_type", using: :btree
-    t.index ["user_type", "user_id", "action_type"], name: "index_actions_on_user_type_and_user_id_and_action_type", using: :btree
+  create_table "actions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "action_type", null: false
+    t.string "action_option"
+    t.string "target_type"
+    t.integer "target_id"
+    t.string "user_type"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_type", "target_id", "action_type"], name: "index_actions_on_target_type_and_target_id_and_action_type"
+    t.index ["user_type", "user_id", "action_type"], name: "index_actions_on_user_type_and_user_id_and_action_type"
   end
 
   create_table "blog_people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -30,39 +30,39 @@ ActiveRecord::Schema.define(version: 20170226113631) do
   end
 
   create_table "blog_posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "title"
-    t.text     "body",        limit: 65535
-    t.integer  "user_id"
-    t.integer  "likes_count"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.string "title"
+    t.text "body"
+    t.integer "user_id"
+    t.integer "likes_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "post_id"
-    t.integer  "user_id"
-    t.string   "body"
-    t.integer  "likes_count"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer "post_id"
+    t.integer "user_id"
+    t.string "body"
+    t.integer "likes_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "posts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "title"
-    t.integer  "user_id"
-    t.integer  "likes_count"
-    t.integer  "stars_count"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string "title"
+    t.integer "user_id"
+    t.integer "likes_count"
+    t.integer "stars_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
-    t.integer  "followers_count"
-    t.integer  "following_count"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.integer  "star_posts_count"
+    t.string "name"
+    t.integer "followers_count"
+    t.integer "following_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "star_posts_count"
   end
 
 end

@@ -1,25 +1,26 @@
+# frozen_string_literal: true
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
 
-require 'factory_girl'
-FactoryGirl.definition_file_paths = [File.expand_path('../factories', __FILE__)]
+require "factory_girl"
+FactoryGirl.definition_file_paths = [File.expand_path("../factories", __FILE__)]
 
-require 'simplecov'
-if ENV['CI']=='true'
-  require 'codecov'
+require "simplecov"
+if ENV["CI"] == "true"
+  require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
-SimpleCov.start 'rails' do
-  add_filter 'lib/action_store/version'
-  add_filter 'lib/generators'
+SimpleCov.start "rails" do
+  add_filter "lib/action_store/version"
+  add_filter "lib/generators"
 end
 
 require File.expand_path("../../test/dummy/config/environment.rb", __FILE__)
 
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
-ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', __FILE__)
+ActiveRecord::Migrator.migrations_paths << File.expand_path("../../db/migrate", __FILE__)
 require "rails/test_help"
-require 'minitest/mock'
+require "minitest/mock"
 
 # Filter out Minitest backtrace while allowing backtrace from other libraries
 # to be shown.

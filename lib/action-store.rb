@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "action_store/version"
 require "action_store/configuration"
 require "action_store/engine"
