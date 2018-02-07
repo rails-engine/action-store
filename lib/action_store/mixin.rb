@@ -110,7 +110,8 @@ module ActionStore
         if defined_action[:counter_cache] && action.target.present?
           target_count = Action.where(
             action_type: defined_action[:action_type],
-            target: action.target
+            target_type: action.target_type,
+            target_id: action.target_id
           ).count
           action.target.update_attribute(defined_action[:counter_cache], target_count)
         end
@@ -118,7 +119,8 @@ module ActionStore
           user_count = Action.where(
             action_type: defined_action[:action_type],
             target_type: action.target_type,
-            user: action.user
+            user_type: action.user_type,
+            user_id: action.user_id
           ).count
           action.user.update_attribute(defined_action[:user_counter_cache], user_count)
         end
