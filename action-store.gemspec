@@ -16,5 +16,10 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/rails-engine/action-store"
   s.license     = "MIT"
 
-  s.add_dependency "rails", ">= 4.2.0", "~> 5"
+  s.add_dependency "rails", "~> 5"
+
+  s.add_development_dependency "mysql2"
+  s.add_development_dependency "factory_girl"
+  s.add_development_dependency "simplecov"
+  s.add_development_dependency "codecov"
 end

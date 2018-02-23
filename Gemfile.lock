@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     action-store (0.3.3)
-      rails (~> 5, >= 4.2.0)
+      rails (~> 5)
 
 GEM
   remote: https://rubygems.org/
