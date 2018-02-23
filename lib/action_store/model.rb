@@ -5,8 +5,8 @@ module ActionStore
 
     included do
       # puts "Initialize ActionStore::Model"
-      belongs_to :target, polymorphic: true
-      belongs_to :user, polymorphic: true
+      belongs_to :target, polymorphic: true, optional: true
+      belongs_to :user, polymorphic: true, optional: true
     end
   end
 end

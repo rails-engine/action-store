@@ -1,3 +1,8 @@
+0.3.3
+-----
+
+- Fix for supports Rails 5.2;
+
 0.3.2
 -----
 
