@@ -2,8 +2,8 @@
 # Configure Rails Environment
 ENV["RAILS_ENV"] = "test"
 
-require "factory_girl"
-FactoryGirl.definition_file_paths = [File.expand_path("../factories", __FILE__)]
+require "factory_bot"
+FactoryBot.definition_file_paths = [File.expand_path("../factories", __FILE__)]
 
 require "simplecov"
 if ENV["CI"] == "true"
@@ -26,11 +26,11 @@ require "minitest/mock"
 # to be shown.
 Minitest.backtrace_filter = Minitest::BacktraceFilter.new
 
-FactoryGirl.find_definitions
+FactoryBot.find_definitions
 
 # Load fixtures from the engine
 class ActiveSupport::TestCase
-  include FactoryGirl::Syntax::Methods
+  include FactoryBot::Syntax::Methods
 end
 
 # Load fixtures from the engine
