@@ -85,7 +85,7 @@ module ActionStore
         if opts[:action_option]
           action.update_attribute(:action_option, opts[:action_option])
         end
-        reset_counter_cache(action, defined_action)
+        reset_counter_cache(action, defined_action, opts)
         true
       end
 
@@ -101,11 +101,11 @@ module ActionStore
         action = Action.where(where_opts(opts)).first
         return true if !action
         action.destroy
-        reset_counter_cache(action, defined_action)
+        reset_counter_cache(action, defined_action, opts)
         true
       end
 
-      def reset_counter_cache(action, defined_action)
+      def reset_counter_cache(action, defined_action, opts)
         return false if action.blank?
         if defined_action[:counter_cache] && action.target.present?
           target_count = Action.where(
@@ -113,7 +113,7 @@ module ActionStore
             target_type: action.target_type,
             target_id: action.target_id
           ).count
-          action.target.update_attribute(defined_action[:counter_cache], target_count)
+          opts[:target].update_attribute(defined_action[:counter_cache], target_count) if opts[:target]
         end
         if defined_action[:user_counter_cache] && action.user.present?
           user_count = Action.where(
@@ -122,7 +122,7 @@ module ActionStore
             user_type: action.user_type,
             user_id: action.user_id
           ).count
-          action.user.update_attribute(defined_action[:user_counter_cache], user_count)
+          opts[:user].update_attribute(defined_action[:user_counter_cache], user_count) if opts[:user]
         end
       end
 

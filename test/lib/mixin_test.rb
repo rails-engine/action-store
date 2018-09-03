@@ -55,6 +55,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal  "User", a.user_type
     assert_equal  post.user_id, a.user_id
     assert_equal 1, Action.where(action_type: "like", target_type: "Post").count
+    assert_equal 1, post.likes_count
     post.reload
     assert_equal 1, post.likes_count
 
@@ -75,6 +76,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal false, a1.new_record?
     assert_not_equal a.id, a1.id
     assert_equal 2, Action.where(action_type: "like", target: post).count
+    assert_equal 2, post.likes_count
     post.reload
     assert_equal 2, post.likes_count
 
@@ -84,6 +86,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_not_equal a.id, a2.id
     assert_not_equal a1.id, a2.id
     assert_equal 1, Action.where(action_type: "star", target: post).count
+    assert_equal 1, post.stars_count
     post.reload
     assert_equal 1, post.stars_count
 
@@ -121,12 +124,19 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_not_nil(action)
     User.create_action("follow", target: u2, user: u3)
     User.create_action("follow", target: u2, user: u4)
+    assert_equal(3, u2.followers_count)
+    assert_equal(1, u1.following_count)
+    assert_equal(1, u3.following_count)
+    assert_equal(1, u4.following_count)
     assert_equal(3, u2.reload.followers_count)
     assert_equal(1, u1.reload.following_count)
     assert_equal(1, u3.reload.following_count)
     assert_equal(1, u4.reload.following_count)
     User.destroy_action("follow", target: u2, user: u3)
     User.destroy_action("follow", target: u2, user: u4)
+    assert_equal(1, u2.followers_count)
+    assert_equal(0, u3.following_count)
+    assert_equal(0, u4.following_count)
     assert_equal(1, u2.reload.followers_count)
     assert_equal(0, u3.reload.following_count)
     assert_equal(0, u4.reload.following_count)
@@ -134,6 +144,8 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     # u2 -> follow -> u1
     action = User.create_action("follow", target: u1, user: u2)
     assert_not_nil(action)
+    assert_equal(1, u2.following_count)
+    assert_equal(1, u1.followers_count)
     assert_equal(1, u2.reload.following_count)
     assert_equal(1, u1.reload.followers_count)
 
