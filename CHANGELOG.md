@@ -6,6 +6,18 @@
   > so you need fix them by remove duplicate.
 - Now `create_action` method use database to makesure unique.
 
+**Upgrade from 0.3.x:**
+
+You must use `rails g action_store:install` to generate the new migration file.
+
+```bash
+$ rails g action_store:install
+    conflict  config/initializers/action_store.rb
+Overwrite config/initializers/action_store.rb? (enter "h" for help) [Ynaqdhm] n
+        skip  config/initializers/action_store.rb
+Copied migration 20181121061544_add_unique_index_to_actions.action_store.rb from action_store
+````
+
 0.3.3
 -----
 
