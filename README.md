@@ -134,17 +134,24 @@ true
 
 ```rb
 # @user1 -> follow @user2
-@user1.create_action(:follow, target: @user2)
-@user1.reload.following_count => 1
-@user2.reload.followers_count_ => 1
-@user1.follow_user?(@user2) => true
+irb> @user1.create_action(:follow, target: @user2)
+irb> @user1.reload.following_count
+=> 1
+irb> @user2.reload.followers_count_
+=> 1
+irb> @user1.follow_user?(@user2)
+=> true
+
 # @user2 -> follow @user1
-@user2.create_action(:follow, target: @user1)
-@user2.follow_user?(@user1) => true
+irb> @user2.create_action(:follow, target: @user1)
+irb> @user2.follow_user?(@user1)
+=> true
+
 # @user1 -> follow @user3
-@user1.create_action(:follow, target: @user3)
+irb> @user1.create_action(:follow, target: @user3)
+
 # @user1 -> unfollow @user3
- @user1.destroy_action(:follow, target: @user3)
+irb> @user1.destroy_action(:follow, target: @user3)
 ```
 
 **Subscribe cases:**
@@ -156,17 +163,22 @@ For example, user to subscribe a issue (like GitHub Issue) on issue create, and 
 So, in this case, we should not use `@user.unsubscribe_issue` method to destroy action record, we need set a value on `action_option` to mark this subscribe is `ignore`.
 
 ```rb
-User.create_action(:subscribe, target: @issue, user: @user)
-@user.subscribe_issue?(@issue) => true
+irb> User.create_action(:subscribe, target: @issue, user: @user)
+irb> @user.subscribe_issue?(@issue)
+=> true
 
-User.create_action(:subscribe, target: @issue, user: @user, action_option: "ignore")
-@user.subscribe_issue?(@issue) => true
+irb> User.create_action(:subscribe, target: @issue, user: @user, action_option: "ignore")
+irb> @user.subscribe_issue?(@issue)
+=> true
 
-action = User.find_action(:subscribe, target: @issue, user: @user)
-action.action_option => "ignore"
+irb> action = User.find_action(:subscribe, target: @issue, user: @user)
+irb> action.action_option
+=> "ignore"
 
-@issue.subscribe_by_user_actions.count => 1
-@issue.subscribe_by_user_actions.where(action_option: nil).count => 0
+irb> @issue.subscribe_by_user_actions.count
+=> 1
+irb> @issue.subscribe_by_user_actions.where(action_option: nil).count
+=> 0
 ```
 
 ## Built-in relations and methods
