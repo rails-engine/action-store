@@ -1,4 +1,4 @@
-0.4.0
+0.4.1
 -----
 
 - Add `UNIQUE INDEX` on `:action_type, :target_type, :target_id, :user_type, :user_id` for makesure action uniqueness.
