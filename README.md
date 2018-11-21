@@ -1,7 +1,7 @@
 ActionStore
 -----------
 
-[![Gem Version](https://badge.fury.io/rb/action-store.svg)](https://badge.fury.io/rb/action-store) [![Build Status](https://travis-ci.org/rails-engine/action-store.svg)](https://travis-ci.org/rails-engine/action-store) [![Code Climate](https://codeclimate.com/github/rails-engine/action-store/badges/gpa.svg)](https://codeclimate.com/github/rails-engine/action-store) [![codecov.io](https://codecov.io/github/rails-engine/action-store/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/action-store?branch=master)
+[![Gem Version](https://badge.fury.io/rb/action-store.svg)](https://badge.fury.io/rb/action-store) [![Build Status](https://travis-ci.org/rails-engine/action-store.svg)](https://travis-ci.org/rails-engine/action-store) [![codecov.io](https://codecov.io/github/rails-engine/action-store/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/action-store?branch=master)
 
 Store different kinds of actions (Like, Follow, Star, Block, etc.) in a single table via ActiveRecord Polymorphic Associations.
 
