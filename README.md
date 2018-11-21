@@ -130,7 +130,7 @@ irb> action.present?
 true
 ```
 
-Other following use cases:
+**Other following use cases:**
 
 ```rb
 # @user1 -> follow @user2
@@ -145,6 +145,28 @@ Other following use cases:
 @user1.create_action(:follow, target: @user3)
 # @user1 -> unfollow @user3
  @user1.destroy_action(:follow, target: @user3)
+```
+
+**Subscribe cases:**
+
+Sometimes, you may need use `action_option` option.
+
+For example, user to subscribe a issue (like GitHub Issue) on issue create, and they wants keep in subscribe list on unsubscribe for makesure next comment will not subscribe this issue again.
+
+So, in this case, we should not use `@user.unsubscribe_issue` method to destroy action record, we need set a value on `action_option` to mark this subscribe is `ignore`.
+
+```rb
+User.create_action(:subscribe, target: @issue, user: @user)
+@user.subscribe_issue?(@issue) => true
+
+User.create_action(:subscribe, target: @issue, user: @user, action_option: "ignore")
+@user.subscribe_issue?(@issue) => true
+
+action = User.find_action(:subscribe, target: @issue, user: @user)
+action.action_option => "ignore"
+
+@issue.subscribe_by_user_actions.count => 1
+@issue.subscribe_by_user_actions.where(action_option: nil).count => 0
 ```
 
 ## Built-in relations and methods
