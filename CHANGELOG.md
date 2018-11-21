@@ -1,3 +1,11 @@
+0.4.0
+-----
+
+- Add `UNIQUE INDEX` on `:action_type, :target_type, :target_id, :user_type, :user_id` for makesure action uniqueness.
+  > NOTE! If you already have actions in database, the new migration may have issue on `db:migrate`,
+  > so you need fix them by remove duplicate.
+- Now `create_action` method use database to makesure unique.
+
 0.3.3
 -----
 

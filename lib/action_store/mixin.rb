@@ -81,10 +81,15 @@ module ActionStore
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])
         return false if defined_action.nil?
 
-        action = Action.find_or_create_by(where_opts(opts))
-        if opts[:action_option]
-          action.update_attribute(:action_option, opts[:action_option])
+        # create! for raise RecordNotUnique
+        begin
+          action = Action.create!(where_opts(opts))
+        rescue ActiveRecord::RecordNotUnique
+          # update action_option on exist
+          action = Action.where(where_opts(opts)).take
+          action.update(action_option: opts[:action_option])
         end
+
         reset_counter_cache(action, defined_action)
         true
       end

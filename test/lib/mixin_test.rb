@@ -58,10 +58,14 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     post.reload
     assert_equal 1, post.likes_count
 
+    # unqiue with target, user, action_type
     assert_equal true, User.create_action("like", target: post, user: post.user, action_option: "aaa")
     a_with_option = User.find_action("like", target: post, user: post.user, action_option: "aaa")
     assert_equal "aaa", a_with_option.action_option
     assert_equal 1, Action.where(action_type: "like", target_type: "Post", action_option: "aaa").count
+    assert_equal true, User.create_action("like", target: post, user: post.user, action_option: "bbb")
+    assert_equal 1, Action.where(action_type: "like", target_type: "Post", action_option: "bbb").count
+    assert_equal 1, Action.where(action_type: "like", target_type: "Post").count
 
     assert_equal true, User.create_action("like", target: post, user: post.user)
     assert_equal a.id, Action.last.id

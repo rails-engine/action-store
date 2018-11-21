@@ -23,6 +23,12 @@ And more and more.
 | `action_option` | Secondary option for storing your custom status, or null if unneeded. |
 | `target_type`, `target_id` | Polymorphic Association for different `Target` models [User, Post, Comment] |
 
+### Uniqueness
+
+> version: ">= 0.4.0"
+
+The have database unique index on fields: `[action_type, target_type, target_id, user_type, user_id]` for keep uniqueness for same action from user to target.
+
 ## Usage
 
 ```rb
@@ -33,7 +39,7 @@ and run `bundle install`
 
 Generate Migrations:
 
-```
+```bash
 $ rails g action_store:install
 create  config/initializers/action_store.rb
 migration 20170208024704_create_actions.rb from action_store
@@ -47,7 +53,7 @@ Use `action_store` to define actions:
 
 app/models/user.rb
 
-```
+```rb
 class User < ActiveRecord::Base
   action_store <action_type>, <target>, opts
 end
