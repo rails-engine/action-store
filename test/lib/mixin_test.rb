@@ -70,6 +70,13 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal 0, post.like_by_user_actions.where(action_option: nil).count
     assert_equal 1, post.like_by_user_actions.where(action_option: "bbb").count
 
+    # test create action in transaction block
+    Action.transaction do
+      User.create_action("like", target: post, user: post.user)
+      User.create_action("like", target: post, user: post.user, action_option: "aaa")
+      User.create_action("like", target: post, user: post.user, action_option: "bbb")
+    end
+
     assert_equal true, User.create_action("like", target: post, user: post.user)
     assert_equal a.id, Action.last.id
 

@@ -83,7 +83,8 @@ module ActionStore
 
         # create! for raise RecordNotUnique
         begin
-          action = Action.create!(where_opts(opts))
+          action = Action.find_or_create_by!(where_opts(opts))
+          action.update(action_option: opts[:action_option])
         rescue ActiveRecord::RecordNotUnique
           # update action_option on exist
           action = Action.where(where_opts(opts)).take
