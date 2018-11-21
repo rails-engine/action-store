@@ -70,6 +70,17 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_equal 0, post.like_by_user_actions.where(action_option: nil).count
     assert_equal 1, post.like_by_user_actions.where(action_option: "bbb").count
 
+    # not change action_option not has :action_option
+    User.create_action("like", target: post, user: post.user)
+    assert_equal 1, post.like_by_user_actions.where(action_option: "bbb").count
+    # change action_option: nil
+    User.create_action("like", target: post, user: post.user, action_option: nil)
+    assert_equal 1, post.like_by_user_actions.where(action_option: nil).count
+    assert_equal 0, post.like_by_user_actions.where(action_option: "bbb").count
+    # change action_option: ""
+    User.create_action("like", target: post, user: post.user, action_option: "")
+    assert_equal 1, post.like_by_user_actions.where(action_option: "").count
+
     # test create action in transaction block
     Action.transaction do
       User.create_action("like", target: post, user: post.user)
