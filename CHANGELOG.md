@@ -1,3 +1,19 @@
+0.4.3
+-----
+
+- Auto reload `target`, when action/unaction target.
+
+```rb
+irb> post.likes_count
+=> 0
+irb> user.like_post(post)
+irb> post.likes_count
+=> 1
+irb> user.unlike_post(post)
+irb> post.likes_count
+=> 0
+```
+
 0.4.2
 -----
 
