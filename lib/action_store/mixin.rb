@@ -191,6 +191,7 @@ module ActionStore
             result = user_klass.create_action(action_type, target_type: target_klass.name,
                                                            target_id: target_id,
                                                            user: self)
+            target_or_id.reload if target_or_id.is_a?(target_klass)
             self.reload
             result
           end
@@ -210,6 +211,7 @@ module ActionStore
             result = user_klass.destroy_action(action_type, target_type: target_klass.name,
                                                             target_id: target_id,
                                                             user: self)
+            target_or_id.reload if target_or_id.is_a?(target_klass)
             self.reload
             result
           end

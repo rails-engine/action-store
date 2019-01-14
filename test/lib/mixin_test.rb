@@ -161,7 +161,6 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     assert_not_nil(action)
     assert_equal(1, u2.reload.following_count)
     assert_equal(1, u1.reload.followers_count)
-
   end
 
   test ".destroy_action with not found work" do
@@ -227,6 +226,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     action = @user.like_blog_post(@blog_post)
     assert_not_equal false, action
     assert_equal 1, @user.like_blog_posts.length
+    assert_equal 1, @blog_post.likes_count
     assert_equal 1, @user.like_blog_post_ids.length
     assert_equal true, @user.like_blog_post_ids.include?(@blog_post.id)
     assert_equal true, @user.like_blog_post?(@blog_post)
@@ -234,6 +234,7 @@ class ActionStore::MixinTest < ActiveSupport::TestCase
     # unlike
     action = @user.unlike_blog_post(@blog_post)
     assert_equal 0, @user.like_blog_posts.length
+    assert_equal 0, @blog_post.likes_count
     assert_equal 0, @user.like_blog_post_ids.length
     assert_equal false, @user.like_blog_post_ids.include?(@blog_post.id)
     assert_equal false, @user.like_blog_post?(@blog_post)
