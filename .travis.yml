@@ -11,6 +11,7 @@ rvm:
 gemfile:
   - gemfiles/Gemfile-5-1
   - gemfiles/Gemfile-5-2
+  - gemfiles/Gemfile-6-0
 
 before_script:
   - bundle install

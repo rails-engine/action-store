@@ -2,5 +2,5 @@
 source "https://rubygems.org"
 
 gemspec
-gem "rails", "~> 5.2.0.rc"
+gem "rails", "~> 6.0.0.beta1"
 
