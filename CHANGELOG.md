@@ -1,3 +1,9 @@
+1.1.0
+-----
+
+- Require Rails >= 5.2.
+- Fix primary key for use `bigint` column type.
+
 0.4.3
 -----
 
