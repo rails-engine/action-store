@@ -1,13 +1,13 @@
 # frozen_string_literal: true
-class CreateActions < ActiveRecord::Migration[5.0]
+class CreateActions < ActiveRecord::Migration[5.2]
   def change
     create_table :actions do |t|
       t.string :action_type, null: false
       t.string :action_option
       t.string :target_type
-      t.integer :target_id
+      t.bigint :target_id
       t.string :user_type
-      t.integer :user_id
+      t.bigint :user_id
 
       t.timestamps
     end

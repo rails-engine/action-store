@@ -9,7 +9,6 @@ rvm:
   - 2.6.3
 
 gemfile:
-  - gemfiles/Gemfile-5-1
   - gemfiles/Gemfile-5-2
   - gemfiles/Gemfile-6-0
 
