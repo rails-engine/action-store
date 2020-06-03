@@ -12,13 +12,13 @@
 
 ActiveRecord::Schema.define(version: 2018_11_21_052638) do
 
-  create_table "actions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "actions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "action_type", null: false
     t.string "action_option"
     t.string "target_type"
-    t.integer "target_id"
+    t.bigint "target_id"
     t.string "user_type"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["action_type", "target_type", "target_id", "user_type", "user_id"], name: "uk_action_target_user", unique: true

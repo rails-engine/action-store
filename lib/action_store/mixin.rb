@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ActionStore
   module Mixin
     extend ActiveSupport::Concern
@@ -133,7 +134,6 @@ module ActionStore
       end
 
       private
-
         def define_relations(action)
           target_klass = action[:target_klass]
           action_type = action[:action_type]

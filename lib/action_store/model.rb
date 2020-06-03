@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module ActionStore
   module Model
     extend ActiveSupport::Concern

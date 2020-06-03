@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 FactoryBot.define do
   factory :blog_post, class: Blog::Post do
     sequence(:title) { |n| "blog-post-title-#{n}" }
