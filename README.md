@@ -137,7 +137,7 @@ true
 irb> @user1.create_action(:follow, target: @user2)
 irb> @user1.reload.following_count
 => 1
-irb> @user2.reload.followers_count_
+irb> @user2.reload.followers_count
 => 1
 irb> @user1.follow_user?(@user2)
 => true
