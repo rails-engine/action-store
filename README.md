@@ -1,7 +1,6 @@
-ActionStore
------------
+## ActionStore
 
-[![Gem Version](https://badge.fury.io/rb/action-store.svg)](https://badge.fury.io/rb/action-store) [![Build Status](https://travis-ci.org/rails-engine/action-store.svg)](https://travis-ci.org/rails-engine/action-store) [![codecov.io](https://codecov.io/github/rails-engine/action-store/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/action-store?branch=master)
+[![Gem Version](https://badge.fury.io/rb/action-store.svg)](https://badge.fury.io/rb/action-store) [![build](https://github.com/rails-engine/action-store/workflows/build/badge.svg)](https://github.com/rails-engine/action-store/actions?query=workflow%3Abuild) [![codecov.io](https://codecov.io/github/rails-engine/action-store/coverage.svg?branch=master)](https://codecov.io/github/rails-engine/action-store?branch=master)
 
 Store different kinds of actions (Like, Follow, Star, Block, etc.) in a single table via ActiveRecord Polymorphic Associations.
 
@@ -17,10 +16,10 @@ And more and more.
 
 ## Basic table struct
 
-| Column | Description |
-| ----- | ----- |
-| `action_type` | The type of action [like, watch, follow, star, favorite] |
-| `action_option` | Secondary option for storing your custom status, or null if unneeded. |
+| Column                     | Description                                                                 |
+| -------------------------- | --------------------------------------------------------------------------- |
+| `action_type`              | The type of action [like, watch, follow, star, favorite]                    |
+| `action_option`            | Secondary option for storing your custom status, or null if unneeded.       |
 | `target_type`, `target_id` | Polymorphic Association for different `Target` models [User, Post, Comment] |
 
 ### Uniqueness
@@ -61,13 +60,13 @@ end
 
 #### Convention Over Configuration:
 
-| action, target | Target Model | Target `counter_cache_field` | User `counter_cache_field` | Target has_many | User has_many |
-|----------------|--------------|------------------------------|----------------------------|-----------------|---------------|
-| `action_store :like, :post` | `Post` | | | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
-| `action_store :like, :post, counter_cache: true` | `Post` | `likes_count` |  | `has_many :like_by_user_actions`, `has_many :like_by_users` | `has_many :like_post_actions`, `has_many :like_posts` |
-| `action_store :star, :project, class_name: 'Repository'` | `Repository ` | `stars_count` | `star_projects_count` | `has_many :star_by_user_actions`, `has_many :star_by_users` |
-| `action_store :follow, :user` | `User` | `follows_count` | `follow_users_count` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
-| `action_store :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'` | `User` | `followers_count ` | `following_count ` | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
+| action, target                                                                                         | Target Model  | Target `counter_cache_field` | User `counter_cache_field` | Target has_many                                                 | User has_many                                             |
+| ------------------------------------------------------------------------------------------------------ | ------------- | ---------------------------- | -------------------------- | --------------------------------------------------------------- | --------------------------------------------------------- |
+| `action_store :like, :post`                                                                            | `Post`        |                              |                            | `has_many :like_by_user_actions`, `has_many :like_by_users`     | `has_many :like_post_actions`, `has_many :like_posts`     |
+| `action_store :like, :post, counter_cache: true`                                                       | `Post`        | `likes_count`                |                            | `has_many :like_by_user_actions`, `has_many :like_by_users`     | `has_many :like_post_actions`, `has_many :like_posts`     |
+| `action_store :star, :project, class_name: 'Repository'`                                               | `Repository ` | `stars_count`                | `star_projects_count`      | `has_many :star_by_user_actions`, `has_many :star_by_users`     |
+| `action_store :follow, :user`                                                                          | `User`        | `follows_count`              | `follow_users_count`       | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
+| `action_store :follow, :user, counter_cache: 'followers_count', user_counter_cache: 'following_count'` | `User`        | `followers_count `           | `following_count `         | `has_many :follow_by_user_actions`, `has_many :follow_by_users` | `has_many :follow_user_actions`, `has_many :follow_users` |
 
 for example:
 
