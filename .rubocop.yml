@@ -9,6 +9,9 @@ Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
 
+Style/ClassAndModuleChildren:
+  Enabled: false
+
 Lint/EmptyBlock:
   Enabled: false
 

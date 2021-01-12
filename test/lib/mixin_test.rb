@@ -21,24 +21,27 @@ module ActionStore
       assert_nil User.find_defined_action(:like, :user)
 
       defined_action = User.find_defined_action(:like, :post)
-      assert_equal("like", defined_action[:action_type])
-      assert_equal("post", defined_action[:action_name])
-      assert_equal(Post, defined_action[:target_klass])
-      assert_equal("likes_count", defined_action[:counter_cache])
+      assert_equal "like", defined_action[:action_type]
+      assert_equal "post", defined_action[:action_name]
+      assert_equal Post, defined_action[:target_klass]
+      assert_equal "likes_count", defined_action[:counter_cache]
+      assert_equal Action, defined_action[:action_klass]
 
       defined_action = User.find_defined_action(:follow, :user)
-      assert_equal("follow", defined_action[:action_type])
-      assert_equal("user", defined_action[:action_name])
-      assert_equal(User, defined_action[:target_klass])
-      assert_equal("followers_count", defined_action[:counter_cache])
-      assert_equal("following_count", defined_action[:user_counter_cache])
+      assert_equal "follow", defined_action[:action_type]
+      assert_equal "user", defined_action[:action_name]
+      assert_equal User, defined_action[:target_klass]
+      assert_equal Follow, defined_action[:action_klass]
+      assert_equal "followers_count", defined_action[:counter_cache]
+      assert_equal "following_count", defined_action[:user_counter_cache]
 
       defined_action = User.find_defined_action(:follow, :post)
-      assert_equal("follow", defined_action[:action_type])
-      assert_equal("post", defined_action[:action_name])
-      assert_equal(Post, defined_action[:target_klass])
-      assert_nil(defined_action[:counter_cache])
-      assert_nil(defined_action[:user_counter_cache])
+      assert_equal "follow", defined_action[:action_type]
+      assert_equal "post", defined_action[:action_name]
+      assert_equal Post, defined_action[:target_klass]
+      assert_equal Follow, defined_action[:action_klass]
+      assert_nil defined_action[:counter_cache]
+      assert_nil defined_action[:user_counter_cache]
     end
 
     test ".create_action bas action_type" do
@@ -113,14 +116,20 @@ module ActionStore
       assert_equal 1, Action.where(action_type: "star", target: post).count
       post.reload
       assert_equal 1, post.stars_count
+    end
 
+    test ".create_action with Follow" do
+      post = create(:post)
+      user = create(:user)
+      user1 = create(:user)
+
+      assert_equal true, User.create_action("follow", target: post, user: user)
       assert_equal true, User.create_action("follow", target: post, user: user1)
-      a3 = Action.last
-      assert_equal false, a3.new_record?
-      assert_not_equal a.id, a3.id
-      assert_not_equal a1.id, a3.id
-      assert_not_equal a2.id, a3.id
-      assert_equal 1, Action.where(action_type: "follow", target: post).count
+      assert_equal 0, Action.where(action_type: "follow").count
+      assert_equal 2, Follow.where(action_type: "follow", target: post).count
+      assert_equal 2, Follow.where(action_type: "follow", target_type: "Post").count
+      assert_equal true, user.follow_post?(post)
+      assert_equal true, user1.follow_post?(post)
     end
 
     test ".create_action with target_type under namespace" do
@@ -146,12 +155,14 @@ module ActionStore
       # all user -> follow u2
       action = User.create_action("follow", target: u2, user: u1)
       assert_not_nil(action)
+
       User.create_action("follow", target: u2, user: u3)
       User.create_action("follow", target: u2, user: u4)
       assert_equal(3, u2.reload.followers_count)
       assert_equal(1, u1.reload.following_count)
       assert_equal(1, u3.reload.following_count)
       assert_equal(1, u4.reload.following_count)
+
       User.destroy_action("follow", target: u2, user: u3)
       User.destroy_action("follow", target: u2, user: u4)
       assert_equal(1, u2.reload.followers_count)
