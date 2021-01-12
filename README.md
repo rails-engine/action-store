@@ -181,6 +181,8 @@ irb> @issue.subscribe_by_user_actions.where(action_option: nil).count
 
 ## Use different tables for store actions.
 
+> since 1.1.0
+
 Sometimes, you may want to store actions into different table, for example, **Like** scenarios often have a lot of data, we wants store them into `likes` table.
 
 Create a migration and model
