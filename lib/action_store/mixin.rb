@@ -33,28 +33,29 @@ module ActionStore
         end
       end
 
-      def action_store(action_type, name, opts = {})
-        opts ||= {}
-        klass_name = opts[:class_name] || name.to_s.classify
-        target_klass = klass_name.constantize
+      def action_store(action_type, name, class_name: nil, counter_cache: nil, user_counter_cache: nil)
+        name = name.to_s
+
+        class_name ||= name.classify
+        target_klass = class_name.constantize
         action_type = action_type.to_s
-        if opts[:counter_cache] == true
+        if counter_cache == true
           # @post.stars_count
-          opts[:counter_cache] = "#{action_type.pluralize}_count"
+          counter_cache = "#{action_type.pluralize}_count"
         end
-        if opts[:user_counter_cache] == true
+        if user_counter_cache == true
           # @user.star_posts_count
-          opts[:user_counter_cache] = "#{action_type}_#{name.to_s.pluralize}_count"
+          user_counter_cache = "#{action_type}_#{name.pluralize}_count"
         end
 
         @defined_actions ||= []
         action = {
-          action_name: name.to_s,
+          action_name: name,
           action_type: action_type,
           target_klass: target_klass,
           target_type: target_klass.name,
-          counter_cache: opts[:counter_cache],
-          user_counter_cache: opts[:user_counter_cache]
+          counter_cache: counter_cache,
+          user_counter_cache: user_counter_cache
         }
         @defined_actions << action
 
