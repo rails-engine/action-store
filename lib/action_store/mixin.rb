@@ -33,11 +33,12 @@ module ActionStore
         end
       end
 
-      def action_store(action_type, name, class_name: nil, counter_cache: nil, user_counter_cache: nil)
+      def action_store(action_type, name, class_name: nil, action_class_name: "Action", counter_cache: nil, user_counter_cache: nil)
         name = name.to_s
 
         class_name ||= name.classify
         target_klass = class_name.constantize
+        action_klass = action_class_name.constantize
         action_type = action_type.to_s
         if counter_cache == true
           # @post.stars_count
@@ -52,6 +53,7 @@ module ActionStore
         action = {
           action_name: name,
           action_type: action_type,
+          action_klass: action_klass,
           target_klass: target_klass,
           target_type: target_klass.name,
           counter_cache: counter_cache,
@@ -59,7 +61,8 @@ module ActionStore
         }
         @defined_actions << action
 
-        define_relations(action)
+        define_relations(action_klass: action_klass, target_klass: target_klass,
+                         action_type: action_type, action_name: name)
       end
 
       def find_action(action_type, opts)
@@ -71,7 +74,7 @@ module ActionStore
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])
         return nil if defined_action.nil?
 
-        Action.find_by(where_opts(opts))
+        defined_action[:action_klass].find_by(where_opts(opts))
       end
 
       def create_action(action_type, opts)
@@ -85,11 +88,11 @@ module ActionStore
 
         # create! for raise RecordNotUnique
         begin
-          action = Action.find_or_create_by!(where_opts(opts))
+          action = defined_action[:action_klass].find_or_create_by!(where_opts(opts))
           action.update(action_option: opts[:action_option]) if opts.key?(:action_option)
         rescue ActiveRecord::RecordNotUnique
           # update action_option on exist
-          action = Action.where(where_opts(opts)).take
+          action = defined_action[:action_klass].where(where_opts(opts)).take
           action.update(action_option: opts[:action_option]) if opts.key?(:action_option)
         end
 
@@ -106,7 +109,7 @@ module ActionStore
         defined_action = find_defined_action(opts[:action_type], opts[:target_type])
         return false if defined_action.nil?
 
-        action = Action.where(where_opts(opts)).first
+        action = defined_action[:action_klass].where(where_opts(opts)).first
         return true unless action
 
         action.destroy
@@ -118,15 +121,16 @@ module ActionStore
         return false if action.blank?
 
         if defined_action[:counter_cache] && action.target.present?
-          target_count = Action.where(
+          target_count = defined_action[:action_klass].where(
             action_type: defined_action[:action_type],
             target_type: action.target_type,
             target_id: action.target_id
           ).count
           action.target.update_attribute(defined_action[:counter_cache], target_count)
         end
+
         if defined_action[:user_counter_cache] && action.user.present?
-          user_count = Action.where(
+          user_count = defined_action[:action_klass].where(
             action_type: defined_action[:action_type],
             target_type: action.target_type,
             user_type: action.user_type,
@@ -138,11 +142,7 @@ module ActionStore
 
       private
 
-      def define_relations(action)
-        target_klass = action[:target_klass]
-        action_type = action[:action_type]
-        action_name = action[:action_name]
-
+      def define_relations(target_klass:, action_klass:, action_type:, action_name:)
         user_klass = self
 
         # user, person
@@ -171,7 +171,7 @@ module ActionStore
 
         # User has_many :like_topic_actions
         user_klass.send :has_many, has_many_name, has_many_scope,
-                        class_name: "Action",
+                        class_name: action_klass.name,
                         foreign_key: "user_id"
         # User has_many :like_topics
         user_klass.send :has_many, has_many_through_name,
@@ -182,7 +182,7 @@ module ActionStore
         # Topic has_many :like_user_actions
         target_klass.send :has_many, has_many_name_for_target, has_many_scope,
                           foreign_key: :target_id,
-                          class_name: "Action"
+                          class_name: action_klass.name
         # Topic has_many :like_users
         target_klass.send :has_many, has_many_through_name_for_target,
                           through: has_many_name_for_target,

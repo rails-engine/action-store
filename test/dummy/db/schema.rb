@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_21_052638) do
+ActiveRecord::Schema.define(version: 2021_01_12_035131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,20 @@ ActiveRecord::Schema.define(version: 2018_11_21_052638) do
     t.integer "likes_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "follows", force: :cascade do |t|
+    t.string "action_type", null: false
+    t.string "action_option"
+    t.string "target_type"
+    t.bigint "target_id"
+    t.string "user_type"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["action_type", "target_type", "target_id", "user_type", "user_id"], name: "uk_follows_target_user", unique: true
+    t.index ["target_type", "target_id", "action_type"], name: "index_follows_on_target_type_and_target_id_and_action_type"
+    t.index ["user_type", "user_id", "action_type"], name: "index_follows_on_user_type_and_user_id_and_action_type"
   end
 
   create_table "posts", id: :serial, force: :cascade do |t|

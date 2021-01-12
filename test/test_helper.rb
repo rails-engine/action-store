@@ -29,11 +29,10 @@ Minitest.backtrace_filter = Minitest::BacktraceFilter.new
 
 FactoryBot.find_definitions
 
-# Load fixtures from the engine
-module ActiveSupport
-  class TestCase
-    include FactoryBot::Syntax::Methods
-  end
+class ActiveSupport::TestCase
+  include FactoryBot::Syntax::Methods
+
+  parallelize
 end
 
 # Load fixtures from the engine
