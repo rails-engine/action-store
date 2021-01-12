@@ -50,9 +50,8 @@ and run `rails db:migrate`.
 
 Use `action_store` to define actions:
 
-app/models/user.rb
-
 ```rb
+# app/models/user.rb
 class User < ActiveRecord::Base
   action_store <action_type>, <target>, opts
 end
@@ -71,7 +70,7 @@ end
 for example:
 
 ```rb
-# app/models/action.rb
+# app/models/user.rb
 class User < ActiveRecord::Base
   action_store :like, :post, counter_cache: true
   action_store :star, :post, counter_cache: true, user_counter_cache: true
