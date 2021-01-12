@@ -5,7 +5,7 @@ module ActionStore
   module Generators
     class InstallGenerator < Rails::Generators::Base
       desc "Create ActionStore's base files"
-      source_root File.expand_path("../../../../", __FILE__)
+      source_root File.expand_path("../../..", __dir__)
 
       def add_initializer
         template "config/initializers/action_store.rb", "config/initializers/action_store.rb"

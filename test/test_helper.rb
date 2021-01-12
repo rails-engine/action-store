@@ -4,7 +4,7 @@
 ENV["RAILS_ENV"] = "test"
 
 require "factory_bot"
-FactoryBot.definition_file_paths = [File.expand_path("../factories", __FILE__)]
+FactoryBot.definition_file_paths = [File.expand_path("factories", __dir__)]
 
 require "simplecov"
 if ENV["CI"] == "true"
@@ -16,10 +16,10 @@ SimpleCov.start "rails" do
   add_filter "lib/generators"
 end
 
-require File.expand_path("../../test/dummy/config/environment.rb", __FILE__)
+require File.expand_path("../test/dummy/config/environment.rb", __dir__)
 
-ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
-ActiveRecord::Migrator.migrations_paths << File.expand_path("../../db/migrate", __FILE__)
+ActiveRecord::Migrator.migrations_paths = [File.expand_path("../test/dummy/db/migrate", __dir__)]
+ActiveRecord::Migrator.migrations_paths << File.expand_path("../db/migrate", __dir__)
 require "rails/test_help"
 require "minitest/mock"
 
@@ -30,14 +30,16 @@ Minitest.backtrace_filter = Minitest::BacktraceFilter.new
 FactoryBot.find_definitions
 
 # Load fixtures from the engine
-class ActiveSupport::TestCase
-  include FactoryBot::Syntax::Methods
+module ActiveSupport
+  class TestCase
+    include FactoryBot::Syntax::Methods
+  end
 end
 
 # Load fixtures from the engine
 if ActiveSupport::TestCase.respond_to?(:fixture_path=)
-  ActiveSupport::TestCase.fixture_path = File.expand_path("../fixtures", __FILE__)
+  ActiveSupport::TestCase.fixture_path = File.expand_path("fixtures", __dir__)
   ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
-  ActiveSupport::TestCase.file_fixture_path = ActiveSupport::TestCase.fixture_path + "/files"
+  ActiveSupport::TestCase.file_fixture_path = "#{ActiveSupport::TestCase.fixture_path}/files"
   ActiveSupport::TestCase.fixtures :all
 end

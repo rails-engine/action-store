@@ -13,7 +13,7 @@ class CreateActions < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    add_index :actions, [:user_type, :user_id, :action_type]
-    add_index :actions, [:target_type, :target_id, :action_type]
+    add_index :actions, %i[user_type user_id action_type]
+    add_index :actions, %i[target_type target_id action_type]
   end
 end

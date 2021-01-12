@@ -10,6 +10,7 @@ module ActionStore
   class << self
     def config
       return @config if defined?(@config)
+
       @config = Configuration.new
       @config
     end
