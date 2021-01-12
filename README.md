@@ -180,6 +180,59 @@ irb> @issue.subscribe_by_user_actions.where(action_option: nil).count
 => 0
 ```
 
+## Use different tables for store actions.
+
+Sometimes, you may want to store actions into different table, for example, **Like** scenarios often have a lot of data, we wants store them into `likes` table.
+
+Create a migration and model
+
+```bash
+$ rails g migration create_likes
+```
+
+And then modify this migration file to let this table have same struct like the `actions`
+
+```rb
+class CreateLikes < ActiveRecord::Migration[6.1]
+  def change
+    create_table :likes do |t|
+      t.string :action_type, null: false
+      t.string :action_option
+      t.string :target_type
+      t.bigint :target_id
+      t.string :user_type
+      t.bigint :user_id
+
+      t.timestamps
+    end
+
+    add_index :likes, %i[user_type user_id action_type]
+    add_index :likes, %i[target_type target_id action_type]
+    add_index :likes, %i[action_type target_type target_id user_type user_id], unique: true, name: :uk_likes_target_user
+  end
+end
+```
+
+Create a `app/model/like.rb` model file:
+
+```rb
+class Like < Action
+  self.table_name = "likes"
+end
+```
+
+And then change you `action_store` define to special some case to use Like model:
+
+```rb
+# app/models/user.rb
+class User < ActiveRecord::Base
+  action_store :like, :post, counter_cache: true, action_class_name: "Like"
+  action_store :like, :comment, counter_cache: true, action_class_name: "Like"
+end
+```
+
+Now, `user.like_post`, `user.like_comment` will store the actions into `likes` table.
+
 ## Built-in relations and methods
 
 When you call `action_store`, ActionStore will define many-to-many relations for User and Target models.
