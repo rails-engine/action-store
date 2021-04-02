@@ -16,11 +16,12 @@ And more and more.
 
 ## Basic table struct
 
-| Column                     | Description                                                                 |
-| -------------------------- | --------------------------------------------------------------------------- |
-| `action_type`              | The type of action [like, watch, follow, star, favorite]                    |
-| `action_option`            | Secondary option for storing your custom status, or null if unneeded.       |
-| `target_type`, `target_id` | Polymorphic Association for different `Target` models [User, Post, Comment] |
+| Column                     | Chars Limit | Description                                                                 |
+| -------------------------- | ----------- | --------------------------------------------------------------------------- |
+| `action_type`              | 64          | The type of action [like, watch, follow, star, favorite]                    |
+| `action_option`            | 64          | Secondary option for storing your custom status, or null if unneeded.       |
+| `target_type`, `target_id` | 64          | Polymorphic Association for different `Target` models [User, Post, Comment] |
+| `user_type`                | 64          | Polymorphic Association for different user model [User, Group, Member]      |
 
 ### Uniqueness
 
