@@ -1,3 +1,7 @@
+## 1.1.1
+
+- Update Table column limit for fix MySQL max key length error. (#17)
+
 ## 1.1.0
 
 - Allows to configure different Models / Tables for store actions. (#16)
