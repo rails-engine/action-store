@@ -8,26 +8,29 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - ruby: 2.7
-          gemfile: Gemfile
-          postgres: 10
-        - ruby: 2.6
-          gemfile: gemfiles/Gemfile-6-0
-          postgres: 10
-        - ruby: 2.6
-          gemfile: gemfiles/Gemfile-5-2
-          postgres: 10
+          - ruby: 3.0
+            gemfile: Gemfile
+            postgres: 10
+          - ruby: 2.7
+            gemfile: gemfiles/Gemfile-6-1
+            postgres: 10
+          - ruby: 2.6
+            gemfile: gemfiles/Gemfile-6-0
+            postgres: 10
+          - ruby: 2.6
+            gemfile: gemfiles/Gemfile-5-2
+            postgres: 10
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
       USE_OFFICIAL_GEM_SOURCE: 1
     steps:
-    - uses: actions/checkout@v2
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - uses: ankane/setup-postgres@v1
-      with:
-        postgres-version: ${{ matrix.postgres }}
-    - run: createdb action-store-test
-    - run: bundle exec rails test
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - uses: ankane/setup-postgres@v1
+        with:
+          postgres-version: ${{ matrix.postgres }}
+      - run: createdb action-store-test
+      - run: bundle exec rails test

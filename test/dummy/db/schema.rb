@@ -16,11 +16,11 @@ ActiveRecord::Schema.define(version: 2021_01_12_035131) do
   enable_extension "plpgsql"
 
   create_table "actions", force: :cascade do |t|
-    t.string "action_type", null: false
-    t.string "action_option"
-    t.string "target_type"
+    t.string "action_type", limit: 64, null: false
+    t.string "action_option", limit: 64
+    t.string "target_type", limit: 64
     t.bigint "target_id"
-    t.string "user_type"
+    t.string "user_type", limit: 64
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
