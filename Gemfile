@@ -3,4 +3,4 @@
 source "https://rubygems.org"
 
 gemspec
-gem "rails", "~> 7.0.0.alpha"
+gem "rails", "~> 7.0.0"
