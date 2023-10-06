@@ -8,8 +8,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - ruby: 3.0.0
+          - ruby: 3.2
             gemfile: Gemfile
+            postgres: 10
+          - ruby: 3.2
+            gemfile: gemfiles/Gemfile-7-0
             postgres: 10
           - ruby: 2.7
             gemfile: gemfiles/Gemfile-6-1
@@ -20,6 +23,7 @@ jobs:
           - ruby: 2.6
             gemfile: gemfiles/Gemfile-5-2
             postgres: 10
+
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
       USE_OFFICIAL_GEM_SOURCE: 1

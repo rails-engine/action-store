@@ -1,3 +1,7 @@
+New release please vitit GitHub Releases page.
+
+https://github.com/rails-engine/action-store/releases
+
 ## 1.1.1
 
 - Update Table column limit for fix MySQL max key length error. (#17)
