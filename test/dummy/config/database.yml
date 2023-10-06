@@ -1,4 +1,7 @@
 default: &default
+  host: localhost
+  port: 54321
+  user: postgres
   adapter: postgresql
   timeout: 5000
   encoding: utf-8
