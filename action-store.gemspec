@@ -19,8 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 5.2"
 
-  s.add_development_dependency "codecov"
   s.add_development_dependency "factory_bot"
   s.add_development_dependency "pg"
-  s.add_development_dependency "simplecov"
 end
