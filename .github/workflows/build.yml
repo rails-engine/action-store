@@ -4,43 +4,52 @@ jobs:
   build:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: action-store-test
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "123456"
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       fail-fast: false
       matrix:
         include:
-          - ruby: 3.2
+          - ruby: 3.3
             gemfile: Gemfile
-            postgres: 10
+            rails_version: 7.2
+          - ruby: 3.2
+            gemfile: gemfiles/Gemfile-7-1
             rails_version: 7.1
           - ruby: 3.2
             gemfile: gemfiles/Gemfile-7-0
-            postgres: 10
             rails_version: 7.0
           - ruby: 2.7
             gemfile: gemfiles/Gemfile-6-1
-            postgres: 10
             rails_version: 6.1
           - ruby: 2.6
             gemfile: gemfiles/Gemfile-6-0
-            postgres: 10
             rails_version: 6.0
           - ruby: 2.6
             gemfile: gemfiles/Gemfile-5-2
-            postgres: 10
             rails_version: 5.0
 
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
       USE_OFFICIAL_GEM_SOURCE: 1
       RAILS_VERSION: ${{ matrix.rails_version }}
+      DATABASE_URL: postgres://postgres:123456@localhost:5432/action-store-test
     steps:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - uses: ankane/setup-postgres@v1
-        with:
-          postgres-version: ${{ matrix.postgres }}
-      - run: createdb action-store-test
       - run: bundle exec rails test
