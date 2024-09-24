@@ -1,0 +1,26 @@
+# DEVELOPMENT GUIDE
+
+```bash
+docker-compose up -d
+```
+
+Create local datebase
+
+```bash
+bundle install
+rails db:create db:migrate
+```
+
+Run tests
+
+```bash
+rails test
+```
+
+## Publish new RubyGem version
+
+- Update version in `lib/action_store/version.rb`
+- Run `bundle install`.
+- Create a new tag in the format `vX.X.X` and push it to the repository.
+- Run `rake release` to publish the new version to RubyGems.
+- Write release notes in GitHub releases: https://github.com/rails-engine/action-store/releases
